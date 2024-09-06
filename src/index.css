@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  @apply bg-[#efefef];
+}
+
+.btn {
+  @apply h-[50px] rounded-[25px] text-white;
+}
+
+.btn::before {
+  content: "";
+  @apply absolute top-0 left-0 w-full h-full bg-black rounded-full transition-transform;
+}
+
+.btn:hover::before {
+  @apply scale-[1.1];
+}
+
+.login-nav-btn::before {
+  content: "";
+  @apply absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[200%] aspect-square bg-gradient-to-tr from-blue-400 via-white to-purple-400 origin-top-left;
+  animation: rotation 2s linear infinite;
+}
+
+.animated-card {
+  animation: fade-in 1s ease var(--delay) forwards;
+}
+
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg) translate(-50%, -50%);
+  }
+
+  to {
+    transform: rotate(360deg) translate(-50%, -50%);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
