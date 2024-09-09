@@ -38,33 +38,20 @@ const OPTIONS = [
 export default function OptionsModal() {
     const [showOptions, setShowOptions] = useState(false);
 
-    const modalRef = useRef<HTMLDivElement>(null);
-
     const open = () => setShowOptions(true);
     const close = () => setShowOptions(false);
 
-    const handleClick = () => {
-        setShowOptions(!showOptions);
-
-        if (showOptions) return;
-        const rect = modalRef.current?.getBoundingClientRect();
-
-        if (!rect) return;
-        const willFitLeft = (rect.left + rect.width) <= window.innerWidth;
-        const willFitRight = (rect.right + rect.width) <= window.innerWidth;
-        const willFitBottom = (rect.bottom + rect.height) <= window.innerHeight;
-        const willFitTop = (rect.top + rect.height) <= window.innerWidth;
-    }
+    const handleClick = () => setShowOptions(!showOptions);
     
     return (
-        <div className="relative z-10">
-            <button onClick={showOptions ? close : open} className={`${showOptions ? 'hover:bg-red-100 hover:text-red-500' : ''} relative z-10 w-[50px] aspect-square bg-white rounded-full flex items-center justify-center shadow-md shadow-black/10`}>
+        <div className="relative z-[2] md:z-[10]">
+            <button onClick={showOptions ? close : open} className={`${showOptions ? 'hover:bg-red-100 hover:text-red-500 hover:border-red-300' : ''} peer relative z-10 w-[50px] aspect-square bg-white rounded-full flex items-center justify-center border border-gray-300`}>
                 <span className={`${showOptions ? 'rotate-[90deg]' : ''} transition-transform duration-300`}>
                     {showOptions ? <MdClose size={20} /> : <MdMoreHoriz size={20} />}
                 </span>
             </button>
 
-            <div ref={modalRef} onClick={handleClick} className={`${showOptions ? '' : 'opacity-0 pointer-events-none'} transition-opacity duration-300 absolute top-0 right-[calc(100%_+_20px)] w-max min-w-[300px]`}>
+            <div onClick={handleClick} className={`${showOptions ? '' : 'opacity-0 pointer-events-none'} transition-opacity duration-300 absolute top-0 right-[calc(100%_+_20px)] w-max min-w-[300px] border border-gray-300 peer-hover:border-red-300`}>
                 <div className="fixed top-0 left-0 w-full h-full bg-black/10 backdrop-blur-sm"></div>
                 <ul className={`${showOptions ? 'delay-100' : 'scale-50 opacity-0'} duration-300 transition-[transform,opacity] origin-top-right relative flex flex-col w-full rounded-[20px] bg-white p-2`}>
                     {
