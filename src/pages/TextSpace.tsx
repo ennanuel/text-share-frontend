@@ -3,18 +3,23 @@ import { BsDot } from "react-icons/bs";
 import { FaAngleDown } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
 import { IoLink } from "react-icons/io5";
-import { MdPerson, MdMoreHoriz } from "react-icons/md";
+import { MdPerson } from "react-icons/md";
 import OptionsModal from "../components/OptionsModal";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import LoadingSpace from "../components/LoadingSpace";
+import ToggleKeyboardButton from "../components/Keyboard/ToggleKeyboardBtn";
 
 
 export default function TextSpace() { 
     return (
-        
-        <body className="flex gap-8 min-h-[calc(100vh_-_60px)] relative mt-10 px-[10vw]">
+        <body className="flex flex-col md:flex-row gap-8 min-h-[calc(100vh_-_60px)] relative mt-10 px-6 md:px-[10vw]">
             <div className="flex-1 flex-col justify-between gap-10">
                 <div className="flex flex-col gap-10">
                     <div className="flex items-center justify-between gap-4">
-                        <h1 className="text-[2rem] font-bold">Page title</h1>
+                        <button className="btn relative aspect-square flex items-center justify-center">
+                            <AiOutlineArrowLeft size={20} className="relative" />
+                        </button>
+                        <h1 className="text-[2rem] font-bold flex-1">Page title</h1>
                         <OptionsModal />
                     </div>
                     <ul className="flex flex-wrap items-center gap-2">
@@ -53,7 +58,12 @@ export default function TextSpace() {
                 <div></div>
             </div>
             <div className="flex-1 flex flex-col gap-4">
-                <textarea name="" id="" className="w-full min-h-[60vh] rounded-[30px] ng-white shadow-lg shadow-black/10 p-6" placeholder="Text that is in this space..."></textarea>
+                <div className="relative">
+                    <textarea name="" id="text-space-area" className="w-full min-h-[60vh] rounded-[30px] ng-white shadow-lg shadow-black/10 p-6" placeholder="Text that is in this space..."></textarea>
+                    <div className="absolute bottom-4 right-4">
+                        <ToggleKeyboardButton inputId="text-space-area" />
+                    </div>
+                </div>
                 <div className="flex justify-between items-center">
                     <ul className="text-gray-400 flex items-center flex-wrap">
                         <li className="flex items-center justify-center gap-2">
