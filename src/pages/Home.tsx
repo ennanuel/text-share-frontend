@@ -13,10 +13,9 @@ export default function Home() {
     const { openCreateModal } = useContext(createModalContext)
     return (
         <>
-            <div className="p-[10%] pt-10 min-h-[100vh] flex gap-10 flex-col">
-            
+            <div className="p-[10%] px-6 md:px-[10%] pt-10 min-h-[100vh] flex gap-10 flex-col">
                 <h2 className="text-4xl font-bold">Your spaces</h2>
-                <div className="flex justify-between items-center gap-4">
+                <div className="flex justify-between items-center gap-2 md:gap-4">
                     <ul className="flex items-center gap-4">
                         <li>
                             <button className="px-2 h-[40px] flex relative items-center justify-center before:absolute before:bottom-0 before:left-0 before:w-full before:h-1 before:bg-black">
@@ -34,12 +33,12 @@ export default function Home() {
                             </button>
                         </li>
                     </ul>
-                    <button className="group h-[40px] px-4 flex gap-2 relative items-center justify-center before:absolute before:top-0 before:left-0 before:w-full before:h-full before:rounded-full before:bg-white before:shadow-md before:shadow-black/10 hover:before:scale-110 before:transition-transform">
+                    <button className="group h-[50px] md:h-[40px] min-w-[50px] md:px-4 flex gap-2 relative items-center justify-center before:absolute before:top-0 before:left-0 before:w-full before:h-full before:rounded-full before:bg-white before:border before:border-gray-300 hover:before:scale-110 before:transition-transform">
                         <AiOutlineHeart size={18} className="relative group-hover:scale-110 transition-transform" />
-                        <span className="relative font-semibold text-sm">Favorites</span>
+                        <span className="relative font-semibold text-sm hidden md:block">Favorites</span>
                     </button>
                 </div>
-                <ul className="grid grid-cols-3 gap-4">
+                <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {
                         [1, 2, 3, 4].map((item, index) => (
                             <li key={index}><TextSpaceCard id={item} index={index} /></li>
