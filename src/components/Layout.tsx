@@ -5,6 +5,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import ColorBackground from "./ColorBackground";
 import CreateSpaceModal from "./CreateSpaceModal";
+import Keyboard from "./Keyboard";
 
 export const createModalContext = createContext<{
     showCreateModal: boolean;
@@ -13,7 +14,7 @@ export const createModalContext = createContext<{
 }>({
     showCreateModal: false,
     openCreateModal: () => null,
-    closeCreateModal: () => null
+    closeCreateModal: () => null,
 });
 
 export const themeContext = createContext<{
@@ -38,6 +39,7 @@ export default function ({ scrolled }: { scrolled: boolean; }) {
             <ColorBackground scrolled={scrolled} />
             <Header scrolled={scrolled} />
             <Outlet />
+            <Keyboard />
             <Footer />
             <CreateSpaceModal />
         </createModalContext.Provider>
