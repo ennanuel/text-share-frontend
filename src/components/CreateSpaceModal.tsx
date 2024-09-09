@@ -56,9 +56,9 @@ export default function CreateSpaceModal() {
 
 
     return (
-        <dialog onClick={handleClick} className={`${showCreateModal ? '' : 'pointer-events-none opacity-0'} transition-opacity duration-300 fixed flex z-[9999] items-center justify-center top-0 left-0 min-w-[100vw] min-h-[100vh] backdrop-blur p-0 m-0 bg-black/20`}>
-            <div ref={dialogRef} className={`${showCreateModal ? 'delay-100 origin-top' : 'opacity-0 scale-y-50 scale-x-75 origin-bottom'} transition-[opacity,transform] duration-300 bg-white rounded-[30px] shadow-lg shadow-blaxk/20`}>
-                <div className={`flex-1 transition-opacity ${showCreateModal ? 'delay-300 duration-300' : 'opacity-0'} relative flex flex-col gap-4 w-[500px] min-h-[500px]`}>
+        <dialog onClick={handleClick} className={`${showCreateModal ? '' : 'pointer-events-none opacity-0'} transition-opacity duration-300 fixed flex z-[9999] items-center justify-center top-0 left-0 min-w-[100vw] h-[100vh] backdrop-blur p-4 m-0 bg-black/20`}>
+            <div ref={dialogRef} className={`${showCreateModal ? 'delay-100 origin-top' : 'opacity-0 scale-y-50 scale-x-75 origin-bottom'} transition-[opacity,transform] duration-300 bg-white rounded-[30px] shadow-lg w-full max-w-[500px]`}>
+                <div className={`flex-1 transition-opacity ${showCreateModal ? 'delay-300 duration-300' : 'opacity-0'} relative flex flex-col gap-4 w-full min-h-[500px]`}>
                     <div className="flex justify-between gap-4 mt-6 pl-8 pr-6">
                         <div className="flex flex-col gap-1">
                             <h2 className="text-2xl font-bold">New space</h2>
@@ -107,7 +107,7 @@ export default function CreateSpaceModal() {
                                         <span className="text-sm font-semibold">Security</span>
                                         <span className="text-xs text-gray-400">Setup security for your space so it can't be easily accessed</span>
                                     </div>
-                                    <button type="button" onClick={() => setValues(prev => ({ ...prev, secure: !secure }))} className={`${secure ? 'border-blue-300' : 'border-gray-300'} group block p-[3px] h-[30px] w-[50px] rounded-full border transition-[border-color]`}>
+                                    <button type="button" onClick={() => setValues(prev => ({ ...prev, secure: !secure }))} className={`${secure ? 'border-blue-300' : 'border-gray-300'} group block p-[3px] w-full h-[30px] max-w-[50px] rounded-full border transition-[border-color]`}>
                                         <span className={`${secure ? 'bg-blue-400 translate-x-[20px]' : 'bg-gray-400'} block h-full aspect-square rounded-full transition-[transform,background-color]`}></span>
                                     </button>
                                 </div>
