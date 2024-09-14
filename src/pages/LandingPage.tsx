@@ -1,7 +1,5 @@
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { BiLogoTailwindCss } from "react-icons/bi";
 import { BsDot } from "react-icons/bs";
-import { FaReact } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa6";
 import { FiCopy, FiLink, FiLock } from "react-icons/fi";
 import { HiOutlineDocument } from "react-icons/hi2";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { BsDot } from "react-icons/bs";
 import { MdMoreHoriz, MdPerson, MdClose, MdOutlineDelete, MdArrowForward, MdOutlineFavorite } from "react-icons/md";
@@ -56,7 +56,7 @@ export default function TextSpaceCard({ id, index = 0 }: { id: number | string; 
             <div className={`${showOptions ? '' : 'scale-50 opacity-0 pointer-events-none'} ${isCloserToLeft ? 'origin-top-left md:translate-x-[260px]' : 'md:origin-top-right origin-top'} transition-[transform,opacity] duration-300 absolute w-full md:w-[240px] top-0 right-0 bg-white rounded-[20px] p-3 z-[9999]`}>
                 <ul className={`${showOptions ? 'delay-100 duration-300' : 'opacity-0'} transition-opacity flex flex-col`}>
                     {
-                        OPTIONS.map(({ title, action, hoverBackground, hoverColor, Icon }, index) => (
+                        OPTIONS.map(({ title, hoverBackground, hoverColor, Icon }, index) => (
                             <li key={index}>
                                 <button className={`${hoverBackground} ${hoverColor} w-full rounded-full flex items-center justify-between p-3 pl-4 transition-[background-color]`}>
                                     <span className="text-sm font-semibold">{title}</span>

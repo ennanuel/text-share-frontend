@@ -39,7 +39,7 @@ export default function CreateSpaceModal() {
     const { showCreateModal, closeCreateModal } = useContext(createModalContext);
 
     const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
-    const [{ title, content, color, secure, password }, setValues] = useState({ title: "", content: "", color: "", secure: false, password: "" });
+    const [{ title, content, secure, password }, setValues] = useState({ title: "", content: "", color: "", secure: false, password: "" });
 
     const handleChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
         if (!event?.target) return;

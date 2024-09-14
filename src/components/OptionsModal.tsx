@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 import { FiEdit, FiShare, FiCopy } from "react-icons/fi";
 

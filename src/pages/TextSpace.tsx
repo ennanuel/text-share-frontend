@@ -6,7 +6,7 @@ import { IoLink } from "react-icons/io5";
 import { MdPerson } from "react-icons/md";
 import OptionsModal from "../components/OptionsModal";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import LoadingSpace from "../components/LoadingSpace";
+
 import ToggleKeyboardButton from "../components/Keyboard/ToggleKeyboardBtn";
 
 

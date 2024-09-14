@@ -6,8 +6,6 @@ import { FiInfo } from "react-icons/fi";
 import { createModalContext } from "../components/Layout";
 
 import TextSpaceCard from "../components/TextSpaceCard";
-import Loading from "../components/Loading";
-import Error from "../components/Error";
 
 export default function TextSpaces() {
     const { openCreateModal } = useContext(createModalContext);

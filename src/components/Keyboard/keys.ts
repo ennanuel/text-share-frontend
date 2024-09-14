@@ -1,4 +1,4 @@
-import { MdArrowUpward, MdClose, MdKeyboardCapslock, MdOutlineKeyboardBackspace, MdOutlineKeyboardReturn, MdOutlineKeyboardTab, MdOutlineSpaceBar } from "react-icons/md";
+import { MdArrowUpward, MdKeyboardCapslock, MdOutlineKeyboardBackspace, MdOutlineKeyboardReturn, MdOutlineKeyboardTab, MdOutlineSpaceBar } from "react-icons/md";
 
 export function getKeyLayout(value: string): string {
     switch(value) {

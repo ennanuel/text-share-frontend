@@ -31,17 +31,20 @@ export default function ({ scrolled }: { scrolled: boolean; }) {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [theme, setTheme] = useState<"light" | "dark">("light");
 
+    const changeTheme = () => setTheme(theme === "light" ? "dark" : "light");
     const openCreateModal = () => setShowCreateModal(true);
     const closeCreateModal = () => setShowCreateModal(false);
 
     return (
-        <createModalContext.Provider value={{ showCreateModal, openCreateModal, closeCreateModal }}>
-            <ColorBackground scrolled={scrolled} />
-            <Header scrolled={scrolled} />
-            <Outlet />
-            <Keyboard />
-            <Footer />
-            <CreateSpaceModal />
-        </createModalContext.Provider>
+        <themeContext.Provider value={{ theme, changeTheme }} >
+            <createModalContext.Provider value={{ showCreateModal, openCreateModal, closeCreateModal }}>
+                <ColorBackground scrolled={scrolled} />
+                <Header scrolled={scrolled} />
+                <Outlet />
+                <Keyboard />
+                <Footer />
+                <CreateSpaceModal />
+            </createModalContext.Provider>
+        </themeContext.Provider>
     )
 }
