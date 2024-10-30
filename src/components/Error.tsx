@@ -14,7 +14,7 @@ export default function Error() {
                 </div>
                 <h2 className="text-center text-[2rem] font-bold mt-4 text-black/80">Oops!</h2>
             </div>
-            <p className="text-gray-600 text-center -mt-4">
+            <p className="text-gray-600 text-center -mt-4 text-sm">
                 <span>Something went wrong, the resources could not be loaded.</span><br />
                 <span>Click <span className="font-semibold">Retry</span> to try again.</span>
             </p>

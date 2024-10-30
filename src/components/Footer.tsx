@@ -41,13 +41,13 @@ export default function Footer() {
                     {
                         NAV_LINKS.map(({ title, link }, index) => (
                             <li key={index}>
-                                <Link to={link} className="text-sm text-gray-300 h-[40px] rounded-full px-6 flex items-center justify-center md:justify-start hover:bg-white/10 hover:text-white">{title}</Link>
+                                <Link to={link} className="text-sm text-gray-300 h-[40px] rounded-full px-6 flex items-center justify-center md:justify-start hover:bg-white/10 hover:text-white whitespace-nowrap">{title}</Link>
                             </li>
                         ))
                     }
                     <li className="group rounded-full p-[2px] bg-gradient-to-br from-yellow-400 via-pink-500 to-purple-600">
                         <Link to="/signup" className="relative h-[50px] flex items-center justify-center md:justify-start gap-4 px-6 bg-black rounded-full">
-                            <span className="relative text-white text-sm font-semibold">Sign up</span>
+                            <span className="relative text-white text-sm font-semibold whitespace-nowrap">Sign up</span>
                             <AiOutlineArrowRight size={18} className="relative group-hover:translate-x-2 transition-transform" />
                         </Link>
                     </li>

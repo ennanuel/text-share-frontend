@@ -1,11 +1,16 @@
+
+import { Link } from "react-router-dom";
+
+import { AiOutlineArrowLeft } from "react-icons/ai";
 import { BiCopy } from "react-icons/bi";
 import { BsDot } from "react-icons/bs";
 import { FaAngleDown } from "react-icons/fa";
-import { FiClock } from "react-icons/fi";
+import { FiClock, FiCopy } from "react-icons/fi";
 import { IoLink } from "react-icons/io5";
+import { LuMoveLeft } from "react-icons/lu";
 import { MdPerson } from "react-icons/md";
+
 import OptionsModal from "../components/OptionsModal";
-import { AiOutlineArrowLeft } from "react-icons/ai";
 
 import ToggleKeyboardButton from "../components/Keyboard/ToggleKeyboardBtn";
 
@@ -15,10 +20,11 @@ export default function TextSpace() {
         <body className="flex flex-col md:flex-row gap-8 min-h-[calc(100vh_-_60px)] relative mt-10 px-6 md:px-[10vw]">
             <div className="flex-1 flex-col justify-between gap-10">
                 <div className="flex flex-col gap-10">
+                    <Link to="/explore" className="group flex items-center gap-2">
+                        <LuMoveLeft size={18} className="relative transition-transform duration-300 group-hover:-translate-x-2" />
+                        <span className="font-semibold relative before:absolute before:bottom-0 before:w-full before:h-[2px] before:bg-black before:scale-x-0 before:transition-transform before:duration-200 before:origin-left group-hover:before:scale-x-100">Text spaces</span>
+                    </Link>
                     <div className="flex items-center justify-between gap-4">
-                        <button className="btn relative aspect-square flex items-center justify-center">
-                            <AiOutlineArrowLeft size={20} className="relative" />
-                        </button>
                         <h1 className="text-[2rem] font-bold flex-1">Page title</h1>
                         <OptionsModal />
                     </div>
@@ -47,11 +53,10 @@ export default function TextSpace() {
                         </li>
                     </ul>
                     <p className="text-gray-400">Visit the website on two devices or browser windows <br />Enter your text in the field to share.</p>
-                    <div className="flex items-center gap-4 bg-white rounded-full p-2 shadow-md shadow-black/10">
+                    <div className="flex items-center gap-4 bg-white rounded-full p-2 border border-gray-200">
                         <input type="url" className="flex-1 h-[45px] text-sm bg-transparent px-4" placeholder="https://google.com" />
-                        <button className="relative h-[45px] bg-black text-white hover:bg-black/90 rounded-full flex items-center justify-center gap-2 px-4">
-                            <IoLink size={18} />
-                            <span className="text-sm font-semibold">Copy Link</span>
+                        <button className="relative w-[45px] aspect-square bg-black text-white hover:bg-black/90 rounded-full flex items-center justify-center gap-2">
+                            <FiCopy size={20} />
                         </button>
                     </div>
                 </div>

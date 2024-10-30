@@ -1,5 +1,5 @@
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, createContext, useContext } from "react";
 import { getKeyLayout, keys } from "./keys";
 import { MdClose } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
@@ -7,15 +7,24 @@ import { useSearchParams } from "react-router-dom";
 interface ModedURLSearchParams extends URLSearchParams {
     show_keyboard?: boolean;
     id_of_input_in_focus?: boolean;
-}
+};
 
-export default function Keyboard() { 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const { show, idOfInputInFocus } = useMemo(() => ({ show: searchParams.get("show_keyboard") === "true", idOfInputInFocus: searchParams.get("id_of_input_in_focus") || "" }), [searchParams]);
+export const keyboardContext = createContext<{
+    showKeyboard: boolean;
+    idOfInputInFocus: string | null;
+    openKeyboard: (idOfInputToFocus: string) => void;
+    closeKeyboard: () => void;
+}>({
+    showKeyboard: false,
+    idOfInputInFocus: null,
+    openKeyboard: () => null,
+    closeKeyboard: () => null,
+});
 
-    const close = () => setSearchParams(({ show_keyboard, id_of_input_in_focus, ...prev }: ModedURLSearchParams) => prev);
+export default function Keyboard() {
+    const { showKeyboard, idOfInputInFocus, closeKeyboard } = useContext(keyboardContext);
 
-    const inputElement = useMemo<HTMLInputElement | HTMLTextAreaElement>(() => (document.getElementById(idOfInputInFocus) as HTMLInputElement), [show, idOfInputInFocus]);
+    const inputElement = useMemo<HTMLInputElement | HTMLTextAreaElement>(() => (document.getElementById(String(idOfInputInFocus)) as HTMLInputElement), [showKeyboard, idOfInputInFocus]);
 
     const [value, setValue] = useState("");
     const [shift, setShift] = useState(false);
@@ -87,7 +96,7 @@ export default function Keyboard() {
     }, [currentCharacter, caretPosition]);
 
     useEffect(() => {
-        if (!show || !inputElement) return;
+        if (!showKeyboard || !inputElement) return;
 
         setValue(inputElement.value);
         setCaretPosition({ start: Number(inputElement.selectionStart), end: Number(inputElement.selectionEnd) });
@@ -118,7 +127,7 @@ export default function Keyboard() {
             inputElement.removeEventListener('change', handleInputChange);
             inputElement.removeEventListener('mouseup', handleInputMouseUp);
         }
-    }, [show, idOfInputInFocus, inputWasClicked]);
+    }, [showKeyboard, idOfInputInFocus, inputWasClicked]);
 
     useEffect(() => {
         if (!inputElement) return;
@@ -126,12 +135,15 @@ export default function Keyboard() {
     }, [value]);
 
     return (
-        <div className={`${show ? '' : 'opacity-0 scale-y-75 scale-x-50 pointer-events-none md:max-h-0'} duration-300 origin-bottom transition-[opacity,_transform] fixed z-10 md:sticky bottom-0 md:bottom-2 flex justify-center w-full md:w-max m-auto bg-white/50 border border-gray-300 rounded-t-3xl md:rounded-3xl backdrop-blur-lg md:shadow-lg md:shadow-black/20`}>
-            <ul className={`${show ? 'delay-200 duration-300' : 'opacity-0'} w-full md:w-auto transition-opacity grid relative grid-cols-[repeat(60,_1fr)] gap-1 md:gap-3 p-3 select-none`}>
+        <div className={`${showKeyboard ? '' : 'opacity-0 scale-y-75 scale-x-50 pointer-events-none md:max-h-0'} duration-300 origin-bottom transition-[opacity,_transform] fixed z-[999999999999] md:sticky bottom-0 md:bottom-2 flex justify-center w-full md:w-max m-auto bg-white/50 border border-gray-300 rounded-t-3xl md:rounded-3xl backdrop-blur-lg md:shadow-lg md:shadow-black/20`}>
+            <ul className={`${showKeyboard ? 'delay-200 duration-300' : 'opacity-0'} w-full md:w-auto transition-opacity grid relative grid-cols-[repeat(60,_1fr)] gap-1 md:gap-3 p-3 select-none`}>
                 {
                     keyboardKeys.map(({ value, altValue, isAlphabet, Icon, spanSize, action }, index) => (
                         <li key={index} className={`${spanSize} relative`}>
-                            <button onClick={() => handleClick(action)} className={`${(value.includes('shift') && shift) || (value === 'caps lock' && capsLock) ? 'bg-black text-white border-black' : 'bg-white/80 border-gray-300 hover:bg-gray-100'} relative w-full h-[40px] md:h-[50px] md:min-w-[50px] max-w-[250px] md:max-w-[500px] m-auto rounded-md md:rounded-2xl border flex items-center justify-center active:bg-black active:text-white active:border-black`}>
+                            <button
+                                onClick={() => handleClick(action)}
+                                className={`${(value.includes('shift') && shift) || (value === 'caps lock' && capsLock) ? 'bg-black text-white border-black' : 'bg-white/80 border-gray-300 hover:bg-gray-100'} relative w-full h-full min-h-[40px] md:min-h-[50px] lg:min-h-[50px] lg:min-w-[50px] max-w-[250px] md:max-w-[500px] m-auto rounded-md md:rounded-2xl border flex items-center justify-center active:bg-black active:text-white active:border-black`}
+                            >
                                 {
                                     !isAlphabet && altValue ?
                                         <span className="absolute top-1 left-1 text-sm text-gray-600 hidden md:flex">{shift ? value : altValue}</span> :
@@ -154,7 +166,7 @@ export default function Keyboard() {
                         </li>
                     ))
                 }
-                <button onClick={close} className="absolute bottom-3 right-3 bg-gray-100 hover:bg-red-100 hover:border-red-300 hover:text-red-600 border border-gray-300 rounded-md md:rounded-2xl px-3 flex items-center justify-center gap-2 h-[40px] md:h-[50px] w-[40px] md:min-w-[50px]">
+                <button onClick={closeKeyboard} className="absolute bottom-3 right-3 bg-gray-100 hover:bg-red-100 hover:border-red-300 hover:text-red-600 border border-gray-300 rounded-md md:rounded-2xl px-3 flex items-center justify-center gap-2 h-[40px] md:h-[50px] w-[40px] md:min-w-[50px]">
                     <MdClose size={18} />
                 </button>
             </ul>

@@ -1,7 +1,7 @@
 import { FaVimeoV } from "react-icons/fa";
 
 
-export default function Loading() { 
+export default function Loading({ text }: { text?: string; }) { 
     return (
         <div className="flex flex-col gap-10 items-center justify-center relative min-h-[30vh] rounded-3xl w-max m-auto">
             <span className="relative">
@@ -11,7 +11,7 @@ export default function Loading() {
                 </span>
             </span>
             <div className="flex flex-col gap-4">
-                <div className="text-center font-semibold">Loading spaces...</div>
+                <div className="text-center font-semibold">{text ? text : "Loading spaces..."}</div>
                 <div className="relative loading-bar">
                     <div className="relative block w-[300px] h-2 rounded-full bg-white p-[2px] overflow-hidden">
                         <div className="block w-full h-full overflow-hidden rounded-full">

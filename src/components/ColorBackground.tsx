@@ -1,6 +1,7 @@
 
 
 export default function ColorBackground({ scrolled }: { scrolled: boolean }) {
+
     return (
         <>
             <div className={`transition-[opacity,transform] duration-500 flex items-center justify-center fixed top-0 left-[50%] h-[100px] w-[700px] ${scrolled ? 'translate-y-[-150%] opacity-0' : 'translate-y-[-60%]'} translate-x-[-50%]`}>
