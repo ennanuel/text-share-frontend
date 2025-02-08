@@ -56,7 +56,7 @@ export default function Header() {
             <header className={`max-w-[var(--big-max-width)] m-auto w-full flex gap-4 items-center justify-between p-4`}>
                 <div className="lg:mr-14">
                     <Link to="/" className={`flex items-center gap-2 transition-[opacity,_transform] duration-500 ease-expo origin-left ${showMobileMenu ? 'scale-50 md:scale-100 opacity-0 md:opacity-100' : 'delay-100'}`}>
-                        <span className="h-12 aspect-square rounded-[24px] flex justify-center items-center bg-white">
+                        <span className="h-12 aspect-square rounded-full flex justify-center items-center bg-white shadow-md shadow-black/5">
                             <img src={logo} className="w-6" />
                         </span>
                     </Link>
@@ -125,7 +125,7 @@ export default function Header() {
                         </button>
                     </form>
                     <div className="flex gap-2 min-h-12 h-12">
-                        <button onClick={toggleMobileMenu} className={`${showMobileMenu ? 'rotate-90' : ''} transition-transform ease-expo duration-300 flex items-center justify-center relative z-10 w-12 min-w-12 h-12 rounded-full bg-black/80 text-gray-200 border border-gray-200/50`}>
+                        <button onClick={toggleMobileMenu} className={`${showMobileMenu ? 'rotate-90' : ''} transition-transform ease-expo duration-300 flex items-center justify-center relative z-10 w-12 min-w-12 h-12 rounded-full bg-black/80 text-gray-200 border border-gray-200/10`}>
                             {showMobileMenu ? <MdClose size={20} /> : <BsFillGridFill size={20} className="text-white" /> }
                         </button>
                     </div>
@@ -136,7 +136,7 @@ export default function Header() {
                                     .filter(({ title }) => user?.id ? true : title !== "My spaces")
                                     .map(({ title, link, Icon }, index) => (
                                     <li key={index} className="w-fit">
-                                        <NavLink to={link} style={{ '--delay': `${(((index)/25) + 0.1).toFixed(2)}s` } as React.CSSProperties} className={({ isActive }) => `${isActive ? 'bg-black/80 text-gray-300 inactive-link text-white/70' : 'bg-white text-gray-800'} ${showMobileMenu ? 'delay-[var(--delay)]' : '-translate-y-1/2 scale-50 opacity-0'} duration-500 transition-[opacity,_transform] ease-expo origin-top-right pl-6 pr-3 h-12 rounded-full flex items-center justify-center gap-3 border border-gray-200`}>
+                                        <NavLink to={link} style={{ '--delay': `${(((index)/25) + 0.1).toFixed(2)}s` } as React.CSSProperties} className={({ isActive }) => `${isActive ? 'bg-black/80 text-gray-300 inactive-link text-white/70' : 'bg-white text-gray-800'} ${showMobileMenu ? 'delay-[var(--delay)]' : '-translate-y-1/2 scale-50 opacity-0'} duration-500 transition-[opacity,_transform] ease-expo origin-top-right pl-6 pr-3 h-12 rounded-full flex items-center justify-center gap-3 border border-gray-200/10`}>
                                             <span className="text-sm whitespace-nowrap">{title}</span>
                                             <Icon size={16} className="icon" />
                                         </NavLink>
