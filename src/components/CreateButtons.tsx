@@ -1,7 +1,6 @@
 
 import { useLocation } from "react-router-dom";
 
-import { FiInfo } from "react-icons/fi";
 import { MdAdd } from "react-icons/md";
 import { useContext } from "react";
 import { createTextSpaceModalContext } from "./Layout";
@@ -21,11 +20,8 @@ export default function CreateButtons() {
     if (pathname.includes('landing')) return;
 
     return (
-        <div className="flex sticky bottom-8 justify-between px-6 mb-20">
-            <button className="flex items-center justify-center h-[50px] w-[50px] rounded-[25px] bg-white shadow-md shadow-black/20">
-                <FiInfo size={18} />
-            </button>
-            <button onClick={open} className='group text-white relative flex items-center justify-center h-[50px] pl-6 pr-4 before:absolute before:w-full before:h-full before:rounded-full before:bg-black hover:before:scale-110 before:transition-transform before:border before:border-white/10'>
+        <div className="flex justify-end sticky bottom-6 h-0 px-4 mt-10 mb-6 w-full max-w-[var(--big-max-width)]">
+            <button onClick={open} className={`group relative -top-14 text-white flex items-center justify-center h-12 md:h-14 pl-6 pr-4 before:absolute before:w-full before:h-full before:rounded-full before:bg-black/80 before:backdrop-blur hover:before:scale-110 before:transition-transform before:border before:border-white/10`}>
                 <span className="relative inline-flex items-center justify-center gap-2">
                     <span className='text-sm font-semibold'>New space</span>
                     <MdAdd size={20} />
