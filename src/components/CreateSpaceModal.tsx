@@ -1,49 +1,26 @@
 import { useContext, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 
 import { BsDot } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
+import { FiAlertTriangle } from "react-icons/fi";
 import { MdClose, MdCheck } from "react-icons/md";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
-import { fetchOptions } from "../assets/data";
-import { ModifiedError } from "../types/error.type";
 import Loading from "./Loading";
-import { FiAlertTriangle } from "react-icons/fi";
 import ToggleKeyboardButton from "./Keyboard/ToggleKeyboardBtn";
+
+import { fetchOptions } from "../assets/data";
+
 import { createTextSpaceModalContext } from "./Layout";
 import { keyboardContext } from "./Keyboard";
-
-
-const COLOR_OPTIONS = [
-    {
-        background: "bg-red-400",
-        value: "red"
-    },
-    {
-        background: "bg-orange-400",
-        value: "orange"
-    },
-    {
-        background: "bg-yellow-400",
-        value: "yellow"
-    },
-    {
-        background: "bg-green-400",
-        value: "green"
-    },
-    {
-        background: "bg-blue-400",
-        value: "blue"
-    },
-    {
-        background: "bg-purple-400",
-        value: "purple"
-    }
-];
+import { ModifiedError } from "../types/error.type";
+import { TEXT_SPACE_COLOR_OPTIONS } from "../assets/constants";
+import { Bounce, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 
 export default function CreateSpaceModal() {
+    const navigate = useNavigate();
     const dialogRef = useRef<HTMLDivElement>(null);
     
     const { showKeyboard, idOfInputInFocus, closeKeyboard } = useContext(keyboardContext)
@@ -62,10 +39,6 @@ export default function CreateSpaceModal() {
     const close = () => {
         closeCreateTextSpaceModal();
         closeKeyboard();
-    }
-
-    const resetValues = () => {
-        setShowAdvancedOptions(false);
     };
 
     const removeError = (key: string) => setErrors(prev => {
@@ -118,8 +91,23 @@ export default function CreateSpaceModal() {
             const response = await fetch(url, options);
             const result = await response.json();
             if (response.status !== 200) throw result;
-            resetValues();
-            alert('Text space created!');
+            
+            closeCreateTextSpaceModal();
+            closeKeyboard();
+            setShowAdvancedOptions(false);
+            form.reset();
+            toast.success('New text space created!', {
+                position: "bottom-left",
+                autoClose: 5000,
+                pauseOnHover: false,
+                hideProgressBar: false,
+                closeOnClick: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+
+            navigate(`/space/${result.textSpaceId}`);
         } catch (error) {
             console.error((error as ModifiedError).message);
             setErrors((error as ModifiedError).errors);
@@ -143,11 +131,8 @@ export default function CreateSpaceModal() {
                         <Loading text="Creating new space..." />
                     </div>
                     <div className="flex justify-between gap-4 mt-6 pl-8 pr-6">
-                        <div className="flex flex-col gap-1">
-                            <h2 className="text-2xl font-bold">New space</h2>
-                            <p className="text-sm text-gray-400">Create a new text space</p>
-                        </div>
-                        <button onClick={close} className="relative z-10 flex items-center justify-center w-[40px] h-[40px] rounded-[15px] hover:bg-red-200 hover:border-transparent hover:text-red-600 focus:outline-none transition-colors">
+                        <h2 className="text-2xl font-bold">Create text space</h2>
+                        <button onClick={close} className="relative z-10 flex items-center justify-center w-[40px] h-[40px] rounded-full hover:bg-red-100/50 hover:border-transparent hover:text-red-400 focus:outline-none transition-colors">
                             <MdClose size={20} />
                         </button>
                     </div>
@@ -181,7 +166,7 @@ export default function CreateSpaceModal() {
                                 <span className="text-xs text-gray-400">Select a color display when viewing space</span>
                                 <ul className="flex flex-wrap gap-2 mt-4">
                                     {
-                                        COLOR_OPTIONS.map(({ background, value }, index) => (
+                                        TEXT_SPACE_COLOR_OPTIONS.map(({ background, value }, index) => (
                                             <li key={index} className={`relative ${background} hover:scale-105 transition-transform rounded-full overflow-clip`}>
                                                 <input
                                                     type="radio"
@@ -245,6 +230,7 @@ export default function CreateSpaceModal() {
                                         />
                                         <ToggleKeyboardButton inputId="space_password" />
                                         <button
+                                            type="button"
                                             onClick={() => setShowPassword(!showPassword)}
                                             className="flex ml-2 items-center justify-center w-[30px] aspect-square rounded-full bg-gray-200 text-gray-400"
                                         >
