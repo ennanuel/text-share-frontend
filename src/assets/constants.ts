@@ -41,37 +41,49 @@ export const TEXT_SPACE_COLOR_OPTIONS = [
     {
         background: "bg-red-400",
         cardBackground: "bg-gradient-to-b from-red-200 to-red-300",
-        borderColor: "border-red-300",
+        borderColor: "border-red-200",
+        displayColor: "bg-red-100",
+        iconColor: "bg-red-200",
         value: "red"
     },
     {
         background: "bg-orange-400",
         cardBackground: "bg-orange-200",
         borderColor: "border-orange-200",
+        displayColor: "bg-orange-100",
+        iconColor: "bg-orange-200",
         value: "orange"
     },
     {
         background: "bg-yellow-400",
         cardBackground: "bg-yellow-100",
         borderColor: "border-yellow-200",
+        displayColor: "bg-yellow-100",
+        iconColor: "bg-yellow-200",
         value: "yellow"
     },
     {
         background: "bg-green-400",
         cardBackground: "bg-gradient-to-b from-green-100 to-green-200",
         borderColor: "border-green-200",
+        displayColor: "bg-green-100",
+        iconColor: "bg-green-200",
         value: "green"
     },
     {
         background: "bg-blue-400",
         cardBackground: "bg-gradient-to-b from-blue-100 to-blue-200",
-        borderColor: "border-blue-300",
+        borderColor: "border-blue-200",
+        displayColor: "bg-blue-100",
+        iconColor: "bg-blue-200",
         value: "blue"
     },
     {
         background: "bg-purple-400",
         cardBackground: "bg-purple-200",
-        borderColor: "border-purple-300",
+        borderColor: "border-purple-200",
+        displayColor: "bg-purple-100",
+        iconColor: "bg-purple-200",
         value: "purple"
     }
 ];
@@ -107,6 +119,15 @@ export const TEXT_SPACE_OPTIONS = [
         Icon: MdOutlineDelete
     }
 ];
+
+export const DEFAULT_COLOR_OPTION = {
+    background: "bg-white",
+    cardBackground: "bg-white",
+    borderColor: "border-gray-200",
+    displayColor: "bg-white",
+    iconColor: "bg-gray-100",
+    value: "white"
+}
 
 export const ONE_YEAR_IN_MILLISECONDS = 31536000000;
 export const ONE_MONTH_IN_MILLISECONDS = 2592000000;
