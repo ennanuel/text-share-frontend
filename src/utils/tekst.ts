@@ -1,5 +1,5 @@
 
-import { ONE_MINUTE_IN_MILLISECONDS, ONE_HOUR_IN_MILLISECONDS, ONE_DAY_IN_MILLISECONDS, ONE_WEEK_IN_MILLISECONDS, ONE_MONTH_IN_MILLISECONDS, ONE_YEAR_IN_MILLISECONDS, TEXT_SPACE_COLOR_OPTIONS } from "../assets/constants";
+import { ONE_MINUTE_IN_MILLISECONDS, ONE_HOUR_IN_MILLISECONDS, ONE_DAY_IN_MILLISECONDS, ONE_WEEK_IN_MILLISECONDS, ONE_MONTH_IN_MILLISECONDS, ONE_YEAR_IN_MILLISECONDS, TEXT_SPACE_COLOR_OPTIONS, DEFAULT_COLOR_OPTION } from "../assets/constants";
 
 export function getTextSpaceTime (timestamp: string) {
     const timePassedInMilliseconds = Date.now() - (new Date(timestamp)).getTime();
@@ -21,4 +21,9 @@ export function getTextSpaceCardBackground(color: string | undefined) {
         background,
         border
     }
+};
+
+export function getTextSpaceColors(color: string | undefined) {
+    const colorOption = TEXT_SPACE_COLOR_OPTIONS.find((colorOption) => colorOption.value === color) || DEFAULT_COLOR_OPTION;
+    return colorOption;
 }
