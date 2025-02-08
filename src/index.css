@@ -3,7 +3,13 @@
 @tailwind utilities;
 
 html {
+  --big-max-width: 2048px;
+  --max-width: 1240px;
   @apply bg-[#efefef];
+}
+
+::selection {
+  @apply bg-[#303030] text-white;
 }
 
 .btn {
@@ -12,7 +18,7 @@ html {
 
 .btn::before {
   content: "";
-  @apply absolute top-0 left-0 w-full h-full bg-black rounded-full transition-transform;
+  @apply absolute top-0 left-0 w-full h-full bg-black/80 rounded-full transition-transform;
 }
 
 .btn:hover::before {
@@ -48,6 +54,19 @@ html {
 
 .col-span-10 {
   grid-column: span 10 / span 10;
+}
+
+.inactive-link .icon {
+  @apply md:hidden;
+}
+
+.active-link .icon {
+  @apply inline-block;
+}
+
+@keyframes rotate-normal {
+  from { transform: rotate(0) }
+  to { transform: rotate(360deg) }
 }
 
 
