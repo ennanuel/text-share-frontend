@@ -1,9 +1,8 @@
 import { AiFillAlert } from "react-icons/ai";
 import { IoMdRefresh } from "react-icons/io";
-import { MdClose } from "react-icons/md";
 
 
-export default function Error() {
+export default function Error({ retry }: { retry?: () => void; }) {
     return (
         <div className="flex flex-col gap-10 items-center justify-center">
             <div className="relative flex flex-col items-center justify-center rounded-2xl gap-6">
@@ -18,18 +17,10 @@ export default function Error() {
                 <span>Something went wrong, the resources could not be loaded.</span><br />
                 <span>Click <span className="font-semibold">Retry</span> to try again.</span>
             </p>
-            <button className="group relative text-white h-[50px] px-8 flex items-center justify-center gap-2 before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-black before:rounded-full before:transition-transform hover:before:scale-110">
+            <button onClick={retry} className="group relative text-white h-[50px] px-8 flex items-center justify-center gap-2 before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-black before:rounded-full before:transition-transform hover:before:scale-110">
                 <span className="font-semibold relative text-sm">Retry</span>
                 <IoMdRefresh size={20} className="relative group-hover:rotate-90 transition-transform" />
             </button>
-            <div className="sticky hidden bottom-6 left-0 items-center justify-center">
-                <span className="pl-10 pr-5 py-3 mx-auto bg-[#e42d2d] rounded-full text-white flex items-center justify-between gap-4">
-                    <span className="font-semibold">Oops... seems like an occured</span>
-                    <button className="flex items-center justify-center h-10 w-10 rounded-full hover:bg-white/10">
-                        <MdClose size={20} />
-                    </button>
-                </span>
-            </div>
         </div>
     )
 }
