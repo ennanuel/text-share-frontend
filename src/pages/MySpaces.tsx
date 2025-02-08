@@ -39,22 +39,22 @@ export default function MySpaces() {
     return (
         <div className="min-h-[screen]">
             <div className="px-4 md:px-6 pt-10 min-h-[100vh] flex gap-10 flex-col">
-                <h2 className="text-gray-800 text-[3rem] md:text-[4rem] font-bold animate-[fade-in_1s_ease]">Your spaces</h2>
+                <h2 className="text-gray-800 text-4xl md:text-[3rem] lg:text-[4rem] font-bold animate-[fade-in_1s_ease]">Your spaces</h2>
                 <div className="flex justify-between items-center gap-2 md:gap-4 -mt-6">
                     <ul className="flex items-center gap-4">
                         <li>
                             <button className="px-2 h-[40px] flex relative items-center justify-center before:absolute before:bottom-0 before:left-[50%] before:translate-x-[-50%] before:w-[80%] before:min-w-[40px] before:h-1 before:bg-gray-800 animate-[fade-in_1s_ease_300ms_forwards] opacity-0">
-                                <span className="font-semibold text-base text-gray-800">All</span>
+                                <span className="font-semibold text-sm md:text-base text-gray-800">All</span>
                             </button>
                         </li>
                         <li>
                             <button className="px-2 h-[40px] flex relative items-center justify-center before:absolute before:bottom-0 before:left-0 before:w-full before:h-1 hover:before:bg-text-400 text-gray-400 animate-[fade-in_1s_ease_400ms_forwards] opacity-0">
-                                <span className="font-semibold text-base">Secured</span>
+                                <span className="font-semibold text-sm md:text-base">Secured</span>
                             </button>
                         </li>
                         <li>
                             <button className="px-2 h-[40px] flex relative items-center justify-center before:absolute before:bottom-0 before:left-0 before:w-full before:h-1 hover:before:bg-text-400 text-gray-400 animate-[fade-in_1s_ease_500ms_forwards] opacity-0">
-                                <span className="font-semibold text-base">Unsecured</span>
+                                <span className="font-semibold text-sm md:text-base">Unsecured</span>
                             </button>
                         </li>
                     </ul>

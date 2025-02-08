@@ -68,21 +68,21 @@ export default function TextSpaces() {
 
     else return (
         <div id="text-spaces" className="min-h-[calc(100vh_-_80px)] relative mt-10 flex flex-col gap-4 px-4">
-            <h1 className="font-bold text-gray-800 text-[3rem] md:text-[4rem] animate-[fade-in_1s_ease]">Explore text spaces...</h1>
+            <h1 className="font-bold text-gray-800 text-4xl md:text-[3rem] lg:text-[4rem] animate-[fade-in_1s_ease]">Explore text spaces...</h1>
             <ul className="flex items-center gap-6 mt-6 md:mt-0 md:gap-10 px-4">
                 <li className="flex flex-col gap-2 justify-between relative opacity-0 animate-[fade-in_1s_ease_300ms_forwards]">
                     <button className="h-[40px] relative flex items-center justify-center before:absolute before:bottom-0 before:left-[50%] before:translate-x-[-50%] before:w-[80%] before:h-[4px] before:bg-gray-800">
-                        <span className="font-semibold text-base text-gray-800">Popular</span>
+                        <span className="font-semibold text-sm md:text-base text-gray-800">Popular</span>
                     </button>
                 </li>
                 <li className="flex flex-col gap-2 justify-between relative opacity-0 animate-[fade-in_1s_ease_400ms_forwards]">
                     <button className="h-[40px] relative flex items-center justify-center before:absolute before:bottom-0 before:left-[50%] before:translate-x-[-50%] before:w-[80%] before:h-[4px] hover:before:bg-gray-400">
-                        <span className="font-semibold text-base text-gray-400">Recent</span>
+                        <span className="font-semibold text-sm md:text-base text-gray-400">Recent</span>
                     </button>
                 </li>
                 <li className="flex flex-col gap-2 justify-between relative opacity-0 animate-[fade-in_1s_ease_500ms_forwards]">
                     <button className="h-[40px] relative flex items-center justify-center before:absolute before:bottom-0 before:left-[50%] before:translate-x-[-50%] before:w-[80%] before:h-[4px] hover:before:bg-gray-400">
-                        <span className="font-semibold text-base text-gray-400">Random</span>
+                        <span className="font-semibold text-sm md:text-base text-gray-400">Random</span>
                     </button>
                 </li>
             </ul>
