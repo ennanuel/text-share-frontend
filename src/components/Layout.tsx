@@ -3,10 +3,10 @@ import { Outlet } from "react-router-dom";
 
 import Header from "./Header";
 import Footer from "./Footer";
-import ColorBackground from "./ColorBackground";
 import CreateSpaceModal from "./CreateSpaceModal";
 import Keyboard from "./Keyboard";
 import CreateButtons from "./CreateButtons";
+import { ToastContainer } from "react-toastify";
 
 export const themeContext = createContext<{
     theme: "light" | "dark";
@@ -27,7 +27,7 @@ export const createTextSpaceModalContext = createContext<{
 });
 
 
-export default function ({ scrolled }: { scrolled: boolean; }) {
+export default function Layout () {
     const [showCreateTextSpaceModal, setShowCreateTextSpaceModal] = useState(false);
 
     const openCreateTextSpaceModal = () => setShowCreateTextSpaceModal(true);
@@ -39,13 +39,15 @@ export default function ({ scrolled }: { scrolled: boolean; }) {
     return (
         <createTextSpaceModalContext.Provider value={{ showCreateTextSpaceModal, openCreateTextSpaceModal, closeCreateTextSpaceModal }}>
             <themeContext.Provider value={{ theme, changeTheme }} >
-                <ColorBackground scrolled={scrolled} />
-                <Header scrolled={scrolled} />
-                <Outlet />
+                <Header />
+                <div className="max-w-[var(--max-width)] mb-20 m-auto">
+                    <Outlet />
+                </div>
                 <CreateButtons />
                 <Keyboard />
                 <Footer />
                 <CreateSpaceModal />
+                <ToastContainer />
             </themeContext.Provider>
         </createTextSpaceModalContext.Provider>
     );
