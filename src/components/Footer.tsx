@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { authContext } from "../App";
 import { CiLogout } from "react-icons/ci";
 
-import logo from "../assets/images/Tekst_logo.svg"
+import logo from "../assets/images/tekst_logo.svg"
 
 const NAV_LINKS = [
     {
