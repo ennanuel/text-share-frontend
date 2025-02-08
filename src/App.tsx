@@ -1,19 +1,23 @@
 
 import { createContext, useEffect, useState } from 'react';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Layout from "./components/Layout";
-import LoginAndRegister from "./pages/LoginAndRegister";
+import Login from "./pages/Login";
+import Register from './pages/Register';
 import NotFound from "./pages/NotFound";
 import TextSpaces from './pages/TextSpaces';
 import TextSpace from './pages/TextSpace';
-import Home from './pages/Home';
+import MyTextSpaces from './pages/MySpaces';
 import LandingPage from './pages/LandingPage';
 
 import { keyboardContext } from './components/Keyboard';
+import { fetchOptions } from './assets/data';
+import { io } from 'socket.io-client';
 
 import './App.css';
-import { fetchOptions } from './assets/data';
+
+export const socket = io(import.meta.env.VITE_SERVER_URL);
 
 export const authContext = createContext<{
   user: { id: string; } | null;
@@ -26,10 +30,11 @@ export const authContext = createContext<{
 });
 
 export default function App() {
-  const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<{ id: string; } | null>(null)
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [idOfInputInFocus, setIdOfInputInFocus] = useState<null | string>(null);
+
+  const location = useLocation();
 
   const openKeyboard = (idOfInputToFocus: string) => {
     setShowKeyboard(true);
@@ -44,8 +49,9 @@ export default function App() {
   async function checkAuthentication() {
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/check`, fetchOptions);
+      if (response.status !== 200) return;
+
       const result = await response.json();
-      if (response.status !== 200) throw result;
       setUser({ id: result.userId });
     } catch (error) {
       console.error(error);
@@ -54,34 +60,34 @@ export default function App() {
 
   async function clearAuthentication() { 
     try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/logout`, { ...fetchOptions, method: "POST" });
+      if(response.status !== 204) return;
       setUser(null);
     } catch (error) {
-      console.error(false);
+      console.error(error);
     }
   };
 
-  useEffect(() => { 
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    }
-
-    handleScroll();
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+  useEffect(() => {
+    checkAuthentication();
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => window.scrollTo(0, 0), 0);
+  }, [location])
 
   return (
     <authContext.Provider value={{ user, checkAuthentication, clearAuthentication }}>
       <keyboardContext.Provider value={{ showKeyboard, idOfInputInFocus, openKeyboard, closeKeyboard }}>
         <Routes>
-          <Route path="/signup/:pathname?" element={<LoginAndRegister />} />
-          <Route path="/*" element={<NotFound />} />
-          <Route element={<Layout scrolled={scrolled} />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/landing" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route element={<Layout />}>
+            <Route path="/*" element={<NotFound />} />
+            <Route path="/sign-in" element={<Login />} />
+            <Route path="/sign-up" element={<Register />} />
+            <Route path="/my-spaces" element={<MyTextSpaces />} />
             <Route path="/spaces" element={<TextSpaces />} />
-            <Route path="/spaces/space/:id" element={<TextSpace />} />
+            <Route path="/space/:id" element={<TextSpace />} />
           </Route>
         </Routes>
       </keyboardContext.Provider>
