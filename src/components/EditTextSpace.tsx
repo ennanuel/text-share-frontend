@@ -2,7 +2,7 @@
 import { BsDot } from "react-icons/bs";
 import { FaAngleDown } from "react-icons/fa6";
 import { FiSave } from "react-icons/fi";
-import { VscEye, VscEyeClosed } from "react-icons/vsc";
+import { VscEyeClosed } from "react-icons/vsc";
 
 import ToggleKeyboardButton from "./Keyboard/ToggleKeyboardBtn";
 

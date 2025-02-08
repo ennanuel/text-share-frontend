@@ -1,19 +1,13 @@
-import { AiOutlineLoading } from "react-icons/ai";
-import { BiLoaderAlt } from "react-icons/bi";
-import { HiViewGrid } from "react-icons/hi";
-import { RiLoader3Fill, RiLoader3Line } from "react-icons/ri";
-
 
 
 type Props = { 
-    data: any;
     limit: number;
     setLimit: React.Dispatch<React.SetStateAction<number>>; 
     totalPages: number | undefined; 
     loading: boolean; 
 }
 
-export default function MoreButton({ data, limit, setLimit, totalPages, loading }: Props) {
+export default function MoreButton({ limit, setLimit, totalPages, loading }: Props) {
 
     if(!(Number(totalPages) > 1)) return;
 

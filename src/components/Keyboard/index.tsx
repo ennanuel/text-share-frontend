@@ -2,12 +2,6 @@
 import { useMemo, useState, useEffect, createContext, useContext } from "react";
 import { getKeyLayout, keys } from "./keys";
 import { MdClose } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
-
-interface ModedURLSearchParams extends URLSearchParams {
-    show_keyboard?: boolean;
-    id_of_input_in_focus?: boolean;
-};
 
 export const keyboardContext = createContext<{
     showKeyboard: boolean;
