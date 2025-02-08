@@ -129,7 +129,7 @@ export default function Keyboard() {
     }, [value]);
 
     return (
-        <div className={`${showKeyboard ? '' : 'opacity-0 scale-y-75 scale-x-50 pointer-events-none md:max-h-0'} duration-300 origin-bottom transition-[opacity,_transform] fixed z-[999999999999] md:sticky bottom-0 md:bottom-2 flex justify-center w-full md:w-max m-auto bg-white/50 border border-gray-300 rounded-t-3xl md:rounded-3xl backdrop-blur-lg md:shadow-lg md:shadow-black/20`}>
+        <div className={`${showKeyboard ? '' : 'opacity-0 scale-y-75 scale-x-50 pointer-events-none md:max-h-0'} duration-300 origin-bottom transition-[opacity,_transform] fixed z-[999999999999] md:sticky bottom-0 md:bottom-2 hidden lg:flex justify-center w-full md:w-max m-auto bg-white/50 border border-gray-300 rounded-t-3xl md:rounded-3xl backdrop-blur-lg md:shadow-lg md:shadow-black/20`}>
             <ul className={`${showKeyboard ? 'delay-200 duration-300' : 'opacity-0'} w-full md:w-auto transition-opacity grid relative grid-cols-[repeat(60,_1fr)] gap-1 md:gap-3 p-3 select-none`}>
                 {
                     keyboardKeys.map(({ value, altValue, isAlphabet, Icon, spanSize, action }, index) => (
