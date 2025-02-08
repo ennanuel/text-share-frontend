@@ -4,17 +4,18 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 
 import { LuMoveLeft } from "react-icons/lu";
 
+import UnlockSecuredSpace from "../components/UnlockSecuredSpace";
+import EditTextSpace from "../components/EditTextSpace";
+import NormalTextSpace from "../components/NormalTextSpace";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 
 import { useFetch } from "../utils/fetch";
+import { getTextSpaceColors } from "../utils/tekst";
 import { fetchOptions } from "../assets/data";
 
-import { TextSpace } from "../types/textSpace.type";
-import UnlockSecuredSpace from "../components/UnlockSecuredSpace";
-import EditTextSpace from "../components/EditTextSpace";
-import NormalTextSpace from "../components/NormalTextSpace";
 import { socket } from "../App";
+import { TextSpace } from "../types/textSpace.type";
 
 
 export default function TextSpacePage() { 
@@ -24,12 +25,23 @@ export default function TextSpacePage() {
     const [url, setUrl] = useState(`${import.meta.env.VITE_SERVER_URL}/spaces/space/${id}`);
 
     const { loading, error, data, retry } = useFetch<TextSpace>(url, fetchOptions);
+    const colors = useMemo(() => getTextSpaceColors(data?.color), [data]);
     const authenticationFailed = useMemo(() => error?.statusCode === 401, [error]);
 
     const [password, setPassword] = useState("");
 
     const [searchParams, setSearchParams] = useSearchParams();
     const editMode = useMemo(() => searchParams.get('edit') === 'true', [searchParams]);
+
+    const copyLink = (copyType: "content" | "link") => {
+        const value = copyType === "link" ? `${import.meta.env.VITE_LIVE_URL}/space/${data?._id}` : data?.content;
+
+        if(!value) return;
+
+        navigator.clipboard.writeText(value);
+        setCopied((prev) => ({ ...prev, [copyType]: true }));
+        setTimeout(() => setCopied((prev) => ({ ...prev, [copyType]: false })), 3000);
+    }
 
     const enterEditMode = () => setSearchParams({ edit: 'true' });
     const exitEditMode = () => setSearchParams({ });
@@ -84,11 +96,12 @@ export default function TextSpacePage() {
             {
                 editMode ?
                     <EditTextSpace textSpace={data} /> :
-                    <NormalTextSpace 
+                    <NormalTextSpace
                         textSpace={data} 
                         copied={copied} 
+                        copy={copyLink}
+                        colors={colors}
                         enterEditMode={enterEditMode} 
-                        copyLink={() => null} 
                         share={() => null} 
                         remove={() => null} 
                     />

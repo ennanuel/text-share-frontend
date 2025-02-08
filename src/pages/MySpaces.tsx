@@ -71,7 +71,7 @@ export default function MySpaces() {
                         ))
                     }
                 </ul>
-                <MoreButton data={data} limit={limit} setLimit={setLimit} loading={loading} totalPages={data?.totalPages} />
+                <MoreButton limit={limit} setLimit={setLimit} loading={loading} totalPages={data?.totalPages} />
             </div>
         </div>
     )

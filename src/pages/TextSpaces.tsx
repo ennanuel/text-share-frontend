@@ -97,7 +97,6 @@ export default function TextSpaces() {
                     }
                 </ul>
                 <MoreButton 
-                    data={data}
                     limit={limit} 
                     setLimit={setLimit} 
                     loading={loading} 
