@@ -25,7 +25,7 @@ export default function EditTextSpace({ textSpace }: { textSpace: TextSpace | nu
                         name="title"
                         placeholder="Space title" 
                         value={textSpace.title} 
-                        className="h-16 pr-2 flex-1 text-[2rem] font-semibold bg-transparent placeholder:text-gray-600 text-gray-800 focus:outline-none" 
+                        className="h-12 md:h-16 pr-2 flex-1 text-lg md:text-[2rem] font-semibold bg-transparent placeholder:text-gray-600 text-gray-800 focus:outline-none" 
                     />
                     <ToggleKeyboardButton inputId="text-space-title" />
                 </div>
