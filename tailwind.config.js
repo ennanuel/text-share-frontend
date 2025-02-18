@@ -2,6 +2,9 @@
 export default {
   content: ["./src/**/*.{html,js,ts,tsx,css}"],
   theme: {
+    screens: {
+      'sm': '400px',
+    },
     extend: {
       fontFamily: {
         montserrat: "'Montserrat'"
