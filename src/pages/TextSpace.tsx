@@ -1,6 +1,6 @@
 
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { LuMoveLeft } from "react-icons/lu";
 
@@ -11,40 +11,26 @@ import Loading from "../components/Loading";
 import Error from "../components/Error";
 
 import { useFetch } from "../utils/fetch";
-import { getTextSpaceColors } from "../utils/tekst";
 import { fetchOptions } from "../assets/data";
 
 import { socket } from "../App";
 import { TextSpace } from "../types/textSpace.type";
+import NotFound from "./NotFound";
 
 
 export default function TextSpacePage() { 
     const { id } = useParams();
-    const [copied, setCopied] = useState({ link: false, content: false });
+    const [copiedLink, setCopiedLink] = useState(false);
+    const [copiedContent, setCopiedContent] = useState(false);
+
+    const [editMode, setEditMode] = useState(false);
 
     const [url, setUrl] = useState(`${import.meta.env.VITE_SERVER_URL}/spaces/space/${id}`);
 
     const { loading, error, data, retry } = useFetch<TextSpace>(url, fetchOptions);
-    const colors = useMemo(() => getTextSpaceColors(data?.color), [data]);
     const authenticationFailed = useMemo(() => error?.statusCode === 401, [error]);
 
     const [password, setPassword] = useState("");
-
-    const [searchParams, setSearchParams] = useSearchParams();
-    const editMode = useMemo(() => searchParams.get('edit') === 'true', [searchParams]);
-
-    const copyLink = (copyType: "content" | "link") => {
-        const value = copyType === "link" ? `${import.meta.env.VITE_LIVE_URL}/space/${data?._id}` : data?.content;
-
-        if(!value) return;
-
-        navigator.clipboard.writeText(value);
-        setCopied((prev) => ({ ...prev, [copyType]: true }));
-        setTimeout(() => setCopied((prev) => ({ ...prev, [copyType]: false })), 3000);
-    }
-
-    const enterEditMode = () => setSearchParams({ edit: 'true' });
-    const exitEditMode = () => setSearchParams({ });
 
     const submitPassword: React.FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault();
@@ -55,7 +41,11 @@ export default function TextSpacePage() {
     useEffect(() => { 
         socket.on("editted", ({ textSpaceId }: { textSpaceId: string }) => {
             if(textSpaceId === id) retry();
-        })
+        });
+        
+        return () => {
+            socket.removeAllListeners();
+        }
     }, [socket]);
 
     if(loading) return (
@@ -70,12 +60,12 @@ export default function TextSpacePage() {
     );
     else if(!data && !authenticationFailed) return (
         <div className="min-h-screen flex items-center justify-center">
-            <span>Nothing was found!</span>
+            <NotFound />
         </div>
     );
 
     return (
-        <div className="flex flex-col gap-10 mt-10 px-4">
+        <div className="flex flex-col gap-10 mt-10 px-4 min-h-screen">
             <UnlockSecuredSpace 
                 setPassword={setPassword} 
                 submitPassword={submitPassword}
@@ -83,7 +73,7 @@ export default function TextSpacePage() {
             />
             {
                 editMode ?
-                    <button onClick={exitEditMode} type="button" className="group hover:text-red-500 flex items-center gap-2">
+                    <button onClick={() => setEditMode(false)} type="button" className="group hover:text-red-500 flex items-center gap-2">
                         <LuMoveLeft size={18} className="relative text-inherit transition-[transform,_color] duration-300 group-hover:-translate-x-2" />
                         <span className="font-semibold relative text-inherit transition-colors before:absolute before:bottom-0 before:w-full before:h-[2px] before:bg-red-500 before:scale-x-0 before:transition-transform before:duration-200 before:origin-left group-hover:before:scale-x-100">Back to normal</span>
                     </button> :
@@ -98,12 +88,12 @@ export default function TextSpacePage() {
                     <EditTextSpace textSpace={data} /> :
                     <NormalTextSpace
                         textSpace={data} 
-                        copied={copied} 
-                        copy={copyLink}
-                        colors={colors}
-                        enterEditMode={enterEditMode} 
-                        share={() => null} 
-                        remove={() => null} 
+                        copiedLink={copiedLink}
+                        copiedContent={copiedContent}
+                        refetch={retry}
+                        setCopiedLink={setCopiedLink}
+                        setCopiedContent={setCopiedContent}
+                        setEditMode={setEditMode}
                     />
             }
         </div>
