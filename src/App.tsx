@@ -16,6 +16,8 @@ import { fetchOptions } from './assets/data';
 import { io } from 'socket.io-client';
 
 import './App.css';
+import About from './pages/About';
+import LoginAndRegisterLayout from './components/LoginAndRegisterLayout';
 
 export const socket = io(import.meta.env.VITE_SERVER_URL);
 
@@ -81,10 +83,15 @@ export default function App() {
       <keyboardContext.Provider value={{ showKeyboard, idOfInputInFocus, openKeyboard, closeKeyboard }}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route element={<Layout />}>
-            <Route path="/*" element={<NotFound />} />
+
+          <Route element={<LoginAndRegisterLayout />}>
             <Route path="/sign-in" element={<Login />} />
             <Route path="/sign-up" element={<Register />} />
+          </Route>
+          
+          <Route element={<Layout />}>
+            <Route path="/*" element={<NotFound />} />
+            <Route path="/about" element={<About />} />
             <Route path="/my-spaces" element={<MyTextSpaces />} />
             <Route path="/spaces" element={<TextSpaces />} />
             <Route path="/space/:id" element={<TextSpace />} />
