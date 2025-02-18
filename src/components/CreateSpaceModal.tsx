@@ -2,7 +2,6 @@ import { useContext, useMemo, useRef, useState } from "react";
 
 import { BsDot } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
-import { FiAlertTriangle } from "react-icons/fi";
 import { MdClose, MdCheck } from "react-icons/md";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
@@ -14,9 +13,10 @@ import { fetchOptions } from "../assets/data";
 import { createTextSpaceModalContext } from "./Layout";
 import { keyboardContext } from "./Keyboard";
 import { ModifiedError } from "../types/error.type";
-import { TEXT_SPACE_COLOR_OPTIONS } from "../assets/constants";
-import { Bounce, toast } from "react-toastify";
+import { CREATED_NEW_TEXT_SPACE_TOAST_ID, TEXT_SPACE_COLOR_OPTIONS } from "../assets/constants";
+import { Slide, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { TbAlertCircleFilled } from "react-icons/tb";
 
 
 export default function CreateSpaceModal() {
@@ -58,7 +58,7 @@ export default function CreateSpaceModal() {
         removeError('password');
     };
 
-    const handleClick: React.MouseEventHandler<HTMLDialogElement> = (event) => {
+    const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
         const rect = dialogRef.current?.getBoundingClientRect();
         if (!rect) return;
 
@@ -97,6 +97,7 @@ export default function CreateSpaceModal() {
             setShowAdvancedOptions(false);
             form.reset();
             toast.success('New text space created!', {
+                toastId: CREATED_NEW_TEXT_SPACE_TOAST_ID,
                 position: "bottom-left",
                 autoClose: 5000,
                 pauseOnHover: false,
@@ -104,7 +105,7 @@ export default function CreateSpaceModal() {
                 closeOnClick: true,
                 progress: undefined,
                 theme: "light",
-                transition: Bounce,
+                transition: Slide,
             });
 
             navigate(`/space/${result.textSpaceId}`);
@@ -118,7 +119,7 @@ export default function CreateSpaceModal() {
 
 
     return (
-        <dialog
+        <div
             onClick={handleClick}
             className={`${showCreateTextSpaceModal ? '' : 'pointer-events-none opacity-0'} transition-opacity duration-300 fixed flex z-[9999] items-center justify-center top-0 left-0 min-w-[100vw] h-[100vh] backdrop-blur p-4 m-0 bg-black/20`}
         >
@@ -138,23 +139,23 @@ export default function CreateSpaceModal() {
                     </div>
                     {
                         errors ? 
-                            <div className="flex gap-2 p-2 mx-8 mt-4 bg-red-100 rounded-md text-red-600">
-                                <FiAlertTriangle size={14} />
+                            <div className="relative overflow-clip flex items-center gap-4 p-3 px-4 mx-8 mt-4 bg-red-100/50 rounded-xl text-red-500 before:absolute before:top-0 before:left-0 before:h-full before:w-[6px] before:bg-red-500 border border-red-200/50">
+                                <TbAlertCircleFilled size={14} />
                                 <span className="text-xs">Could not create new text space!</span>
                             </div> :
                             null
                     }
                     <ul className="relative flex mx-8 border-b border-gray-300 gap-[10px] mt-4">
-                        <span className={`absolute flex h-[4px] rounded-full bg-black px-2 left-0 bottom-[-2px] transition-transform duration-300 ${showAdvancedOptions ? 'translate-x-[calc(100%_+_10px)]' : ''}`}>
+                        <span className={`absolute flex h-[4px] rounded-t-full bg-gray-800 px-2 left-0 bottom-[-2px] transition-transform duration-300 ${showAdvancedOptions ? 'translate-x-[calc(100%_+_10px)]' : ''}`}>
                             <span className="opacity-0 font-semibold text-sm">{showAdvancedOptions ? 'Advanced' : 'Basic Info'}</span>
                         </span>
                         <li>
-                            <button onClick={() => setShowAdvancedOptions(false)} className={`${showAdvancedOptions ? 'text-gray-400 hover:text-black' : ''} relative flex p-2 items-center justify-center`}>
+                            <button onClick={() => setShowAdvancedOptions(false)} className={`${showAdvancedOptions ? 'text-gray-400 hover:text-gray-600' : 'text-gray-800'} relative flex p-2 items-center justify-center`}>
                                 <span className="font-semibold text-sm">Basic Info</span>
                             </button>
                         </li>
                         <li>
-                            <button onClick={() => setShowAdvancedOptions(true)} className={`${!showAdvancedOptions ? 'text-gray-400 hover:text-black' : ''} relative flex p-2 items-center justify-center`}>
+                            <button onClick={() => setShowAdvancedOptions(true)} className={`${!showAdvancedOptions ? 'text-gray-400 hover:text-gray-600' : 'text-gray-800'} relative flex p-2 items-center justify-center`}>
                                 <span className="font-semibold text-sm">Advanced</span>
                             </button>
                         </li>
@@ -162,7 +163,7 @@ export default function CreateSpaceModal() {
                     <form action="" onSubmit={handleSubmit} className="relative flex-1 flex flex-col mx-8 mb-6 overflow-clip">
                         <div className={`absolute top-0 left-0 h-[calc(100%_-_60px)] overflow-y-auto w-full flex-1 flex flex-col gap-6 ${showAdvancedOptions ? '' : 'translate-x-[105%] opacity-0'} transition-[opacity,transform] duration-300 py-6`}>
                             <div className="flex flex-col">
-                                <span className="text-sm font-semibold">Color</span>
+                                <span className="text-sm font-semibold text-gray-800">Color</span>
                                 <span className="text-xs text-gray-400">Select a color display when viewing space</span>
                                 <ul className="flex flex-wrap gap-2 mt-4">
                                     {
@@ -184,14 +185,14 @@ export default function CreateSpaceModal() {
                                 </ul>
                             </div>
                             <div className="flex flex-col">
-                                <label htmlFor="space_desc" className="text-sm font-semibold">Description</label>
+                                <label htmlFor="space_desc" className="text-sm font-semibold text-gray-800">Description</label>
                                 <span className="text-xs text-gray-400">Add additional description for Text space</span>
                                 <div className="relative mt-4">
                                     <textarea
                                         name="desc"
                                         id="space_desc"
                                         onChange={handleChange}
-                                        className={`flex-1 rounded-[20px] border p-4 text-sm h-[140px] w-full ${errors?.desc ? 'border-red-400 text-red-500 placeholder:text-red-400' : 'border-gray-200 focus:border-black'} focus:outline-none`}
+                                        className={`flex-1 rounded-[20px] border p-4 text-sm h-[140px] w-full ${errors?.desc ? 'border-red-400 text-red-500 placeholder:text-red-400' : 'border-gray-200 focus:border-gray-600'} focus:outline-none`}
                                     ></textarea>
                                     <span className="absolute right-4 bottom-4 block">
                                         <ToggleKeyboardButton inputId="space_desc" />
@@ -248,7 +249,7 @@ export default function CreateSpaceModal() {
                     
                         <div className={`flex-1 flex flex-col gap-4 py-6 transition-[opacity,transform] duration-300 ${showAdvancedOptions ? 'translate-x-[-105%] opacity-0' : ''}`}>
                             <div className="flex flex-col gap-2">
-                                <div className={`flex items-center border rounded-full ${errors?.title ? 'border-red-300 has-[input:focus]:border-red-400' : 'border-gray-200'} pr-[5px] has-[input:focus]:border-black`}>
+                                <div className={`flex items-center border rounded-full ${errors?.title ? 'border-red-300 has-[input:focus]:border-red-400' : 'border-gray-200'} pr-[5px] has-[input:focus]:border-gray-600`}>
                                     <input 
                                         type="text"
                                         onChange={handleChange} 
@@ -273,7 +274,7 @@ export default function CreateSpaceModal() {
                                             name="content" 
                                             onChange={handleChange}
                                             placeholder="Input your content here."
-                                            className={`text-sm h-full w-full rounded-[20px] border ${errors?.content || errors?.links ? 'border-red-300 focus:border-red-400 text-red-500 placeholder:text-red-400 focus:outline-none focus:boder-black' : 'border-gray-200'} border-gray-200 p-4 block w-full min-h-[200px] bg-transparent`}
+                                            className={`text-sm h-full w-full rounded-[20px] border focus:outline-none ${errors?.content || errors?.links ? 'border-red-300 focus:border-red-400 text-red-500 placeholder:text-red-400 focus:outline-none focus:boder-black' : 'border-gray-200'} border-gray-200 focus:border-gray-600 p-4 block w-full min-h-[200px] bg-transparent`}
                                         ></textarea>
                                         <span className="flex items-center justify-center absolute bottom-2 right-2">
                                             <ToggleKeyboardButton inputId="space_content" />
@@ -304,6 +305,6 @@ export default function CreateSpaceModal() {
                     </form>
                 </div>
             </div>
-        </dialog>
+        </div>
     )
 }
