@@ -1,21 +1,21 @@
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 
-import { FaVimeoV, FaArrowRight } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
-import { FiAlertTriangle } from "react-icons/fi";
 
 import { authContext } from "../App";
 import { fetchOptions } from "../assets/data";
 import { Bounce, toast } from "react-toastify";
+import { TbAlertCircleFilled } from "react-icons/tb";
 
 export default function Login() {
     const navigate = useNavigate();
 
-    const { checkAuthentication } = useContext(authContext);
+    const { checkAuthentication, user } = useContext(authContext);
 
     const [showPassword, setShowPassword] = useState(false);
     const [{ usernameOrEmail, password }, setValues] = useState({ usernameOrEmail: "", password: "" });    
@@ -60,81 +60,88 @@ export default function Login() {
         } finally {
             setFetchState((prev) => ({ ...prev, loading: false }));
         }
-    }
+    };
+
+    useEffect(() => {
+        user?.id && navigate('/my-spaces');
+        const pageTitleElement = document.getElementById("page-title");
+
+        if(pageTitleElement) pageTitleElement.innerText = "Tekst | Sign in";
+    }, []);
 
     return (
-        <div id="login-page" className="relative w-full min-h-[100vh] flex flex-col items-center justify-center p-4 md:p-10 overflow-clip">
-            <div className="fixed top-0 left-0 w-[100vw] h-[100vh]">
-                <span className="absolute block w-[600px] h-[50px] top-0 left-0 translate-x-[-50%] translate-y-[-50%] bg-[#5757c6] rounded-[50%] blur-[60px]"></span>
-                <span className="absolute block w-[100px] h-[100px] top-0 left-0 translate-x-[-50%] translate-y-[-50%] bg-[#4040a7] rounded-full blur-[60px]"></span>
-                <span className="absolute block w-[600px] h-[50px] bottom-0 right-0 translate-x-[50%] translate-y-[50%] bg-pink-400 rounded-[50%] blur-[60px]"></span>
-                <span className="absolute block w-[500px] aspect-square bottom-0 right-0 translate-x-[50%] translate-y-[50%] bg-pink-300 rounded-full blur-[60px]"></span>
-                <span className="absolute block w-[50px] h-[400px] top-[50%] right-0 translate-x-[50%] translate-y-[-50%] bg-purple-400 rounded-[50%] blur-[60px]"></span>
-                <span className="absolute block w-[100px] aspect-square top-[50%] right-0 translate-x-[50%] translate-y-[-50%] bg-purple-200 rounded-full blur-[60px]"></span>
-            </div>
-            <div className="relative w-full max-w-[400px] bg-white rounded-[30px] shadow-lg shadow-black/10 p-4 md:p-8 flex flex-col gap-6 justify-center items-center">
-                <FaVimeoV size={40} className="m-auto" />
-                <div className="flex flex-col gap-1 justify-center items-center">
-                    <h2 className="font-bold text-3xl text-gray-800">Welcome back!</h2>
-                    <p className="text-gray-500">Sign in to your account</p>
+        <div id="login-page" className="relative w-full p-4 md:p-10">
+            <div className="m-auto my-0 max-w-[var(--max-width)] h-full flex flex-col lg:flex-row justify-center lg:justify-end items-center">
+                <div className="hidden md:block flex-1">
+                    <h2 className="text-[4.5rem] leading-[5rem] font-bold text-white">Great to have you back</h2>
                 </div>
-                {
-                    error ?
-                        <div className="w-full flex items-center px-3 py-2 bg-red-100 text-red-500 rounded-full gap-2">
-                            <FiAlertTriangle size={12} />
-                            <span className="flex-1 text-xs font-semibold">Log in failed!</span>
-                        </div> :
-                        null
-                }
-                <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-4 w-full">
-                    <div>
-                        <input 
-                            type="text" 
-                            placeholder="Username or email" 
-                            value={usernameOrEmail}
-                            onChange={handleChange}
-                            name="usernameOrEmail" 
-                            id="username" 
-                            className="h-[40px] w-full border border-gray-300 rounded-full px-4 block text-sm flex-1 bg-transparent" 
-                        />
-                    </div>
-
-                    <div className="flex items-center border border-gray-300 text-gray-600 rounded-full pr-[5px]">
-                        <input 
-                            type={showPassword ? "text" : "password"} 
-                            value={password}
-                            onChange={handleChange}
-                            id="passord"
-                            name="password"
-                            placeholder="Password" 
-                            className="h-[40px] px-4 block text-sm flex-1 bg-transparent rounded-l-full" 
-                        />
-                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="flex items-center justify-center h-[30px] aspect-square rounded-full bg-gray-100">
-                            {showPassword ? <VscEyeClosed size={16} /> : <VscEye size={16} />}
-                        </button>
-                    </div>
-                    <a href="#" className="text-sm text-gray-600 hover:underline w-max px-4 mt-[-8px]">Forgot password?</a>
-                    <div className="flex items-center justify-center gap-4 mt-4">
-                        <button className={`${loading ? 'pointer-events-none' : ''} peer btn relative group flex items-center justify-center px-4 h-[50px] rounded-full w-[95%]`}>
-                            {
-                                loading ?
-                                    <span className="flex items-center justify-center gap-2">
-                                        <span className="text-sm font-semibold relative">Please wait...</span>
-                                    </span> :
-                                    <span className="flex items-center justify-center gap-2">
-                                        <span className="text-sm font-semibold relative">Log in</span>
-                                        <FaArrowRight size={14} className="group-hover:translate-x-2 transition-transform relative" />
-                                    </span>
-                            }
-                        </button>
-
-                        <button type="button" className="h-[50px] aspect-square rounded-full border border-gray-300 flex items-center justify-center gap-2 hover:bg-gray-100 peer-hover:scale-75 transition-transform">
+                <div className="rounded-[32px] w-full max-w-[480px] bg-white border-2 border-gray-800 p-4 sm:p-6 md:p-8 flex flex-col items-center gap-6">
+                    {
+                        error ?
+                            <div className="relative w-full overflow-clip flex items-center px-4 h-12 bg-red-200/50 text-red-500 rounded-xl gap-3 before:absolute before:top-0 before:left-0 before:w-[6px] before:h-full before:bg-red-500 border border-red-200/80">
+                                <TbAlertCircleFilled size={16} />
+                                <span className="flex-1 text-xs font-semibold">Log in failed!</span>
+                            </div> :
+                            null
+                    }
+                    <h3 className="text-3xl font-semibold text-gray-800">Sign in</h3>
+                    <div className="w-full flex flex-col gap-2">
+                        <button type="button" className="w-full px-4 h-12 rounded-full border border-gray-300 flex items-center justify-center gap-2 hover:bg-gray-100 peer-hover:scale-75 transition-transform">
                             <FcGoogle size={20} />
+                            <span className="text-gray-800 text-sm font-semibold whitespace-nowrap">Continue with Google</span>
                         </button>
                     </div>
-                </form>
+                    <div className="w-4/5 h-[1px] flex items-center justify-center gap-3 bg-gray-200 my-4">
+                        <span className="text-gray-400 text-xs font-light px-3 bg-white w-fit">or</span>
+                    </div>
+                    <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-4 w-full">
+                        <div>
+                            <input 
+                                type="text" 
+                                placeholder="Username or email" 
+                                value={usernameOrEmail}
+                                onChange={handleChange}
+                                name="usernameOrEmail" 
+                                id="username" 
+                                className="h-12 w-full border border-gray-300 rounded-full px-4 block text-sm flex-1 bg-transparent focus:outline-none focus:border-gray-600" 
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <div className="flex items-center border border-gray-300 text-gray-600 rounded-full pr-1 has-[input:focus]:border-gray-600">
+                                <input 
+                                    type={showPassword ? "text" : "password"} 
+                                    value={password}
+                                    onChange={handleChange}
+                                    id="passord"
+                                    name="password"
+                                    placeholder="Password" 
+                                    className="h-12 px-4 block text-sm flex-1 bg-transparent rounded-l-full focus:outline-none" 
+                                />
+                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="flex items-center justify-center h-8 aspect-square rounded-full bg-gray-100">
+                                    {showPassword ? <VscEyeClosed size={16} /> : <VscEye size={16} />}
+                                </button>
+                            </div>
 
-                <span className="m-auto text-sm text-gray-500">Don't have an account? <Link to="/sign-up" className="font-semibold hover:underline text-gray-800">Sign up</Link></span>
+                            <a href="#" className="text-sm text-gray-600 underline w-max px-4">Forgot Password?</a>
+                        </div>
+                        <div className="flex items-center justify-center gap-4 mt-4">
+                            <button className={`${loading ? 'pointer-events-none' : ''} relative group flex items-center justify-center px-4 h-14 bg-black/80 text-white rounded-full w-full`}>
+                                {
+                                    loading ?
+                                        <span className="flex items-center justify-center gap-2">
+                                            <span className="text-sm font-semibold relative">Please wait...</span>
+                                        </span> :
+                                        <span className="flex items-center justify-center gap-2">
+                                            <span className="text-sm font-semibold relative">Log in</span>
+                                            <FaArrowRight size={14} className="group-hover:translate-x-2 transition-transform relative" />
+                                        </span>
+                                }
+                            </button>
+                        </div>
+                    </form>
+
+                    <span className="m-auto text-sm text-gray-500">New here? <Link to="/sign-up" className="underline text-gray-800">Create an account</Link></span>
+                </div>
             </div>
         </div>
     )
