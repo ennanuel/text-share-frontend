@@ -40,15 +40,15 @@ export default function Footer() {
     }
 
     return (
-        <div className="bg-[#101010] min-h-screen flex flex-col pt-10">
+        <div className="bg-[#101010] min-h-screen flex flex-col pt-10 -mt-8">
             <div className="bg-[#efefef] w-full -mt-10 h-10 rounded-b-[20px] md:rounded-b-[40px]"></div>
             <footer className=" flex-1 text-white relative overflow-clip pt-10 pb-4 md:pb-10 px-2 md:px-0 flex flex-col justify-end md:justify-between gap-10 md:gap-6">
                 <span className="absolute bottom-0 left-[50%] translate-x-[-50%] translate-y-[50%] h-[100px] w-[600px] block">
                     <span className="block w-full h-[20%] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-gradient-to-r from-purple-800 via-purple-600 to-purple-800 rounded-[50%] blur-[50px]"></span>
                     <span className="block h-[50%] aspect-square absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-purple-500 rounded-[50%] blur-[50px]"></span>
                 </span>
-                <div className="relative grid grid-cols-2 gap-4 gap-y-8 max-w-[var(--max-width)] w-full my-0 m-auto px-4 md:px-8 py-10">
-                    <div className="col-span-2 md:col-span-1 flex flex-col gap-12">
+                <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-4 gap-y-8 max-w-[var(--max-width)] w-full my-0 m-auto px-4 md:px-8 py-10">
+                    <div className="sm:col-span-2 md:col-span-1 flex flex-col gap-12">
                         <Link to="/" className="flex items-center justify-center w-20 aspect-square rounded-full bg-gradient-to-br from-blue-500 to-pink-400">
                             <img src={logo} className="w-10" />
                         </Link>
@@ -76,15 +76,15 @@ export default function Footer() {
                                     <span className="text-sm whitespace-nowrap font-light">Log out</span>
                                 </button> :
                                 <>
-                                <span className="group relative rounded-full p-[1px] w-full md:w-auto h-fit bg-gradient-to-r from-pink-400 via-purple-500 to-blue-600">
+                                <span className="group relative rounded-full p-[1px] w-fit sm:w-full md:w-auto h-fit bg-gradient-to-r from-pink-400 via-purple-500 to-blue-600">
                                     <Link to="/sign-in" className="relative h-12 min-w-[120px] flex items-center justify-center gap-4 px-6 bg-[#101010] group-hover:bg-transparent transition-colors backdrop-blur-lg rounded-full">
                                         <span className="relative text-white text-sm whitespace-nowrap font-light">Sign in</span>
                                     </Link>
                                 </span>
-                                <span className="group relative rounded-full p-[1px] w-full md:w-auto h-fit bg-gradient-to-r from-blue-400 via-purple-500 to-pink-600">
+                                <span className="group relative rounded-full p-[1px] w-fit sm:w-full md:w-auto h-fit bg-gradient-to-r from-blue-400 via-purple-500 to-pink-600">
                                     <Link to="/sign-up" className="relative h-12 min-w-[120px] flex items-center justify-center gap-4 px-6 bg-[#101010] group-hover:bg-transparent transition-colors backdrop-blug-lg rounded-full">
                                         <span className="relative text-white text-sm whitespace-nowrap font-light">Create an account</span>
-                                        <AiOutlineArrowRight size={16} />
+                                        <AiOutlineArrowRight size={16} className="hidden md:inline-block" />
                                     </Link>
                                 </span>
                                 </>
