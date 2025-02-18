@@ -1,4 +1,4 @@
-import { FaVimeoV } from "react-icons/fa";
+import logo from "../assets/images/tekst_logo_dark.svg"
 
 
 export default function Loading({ text }: { text?: string; }) { 
@@ -6,8 +6,8 @@ export default function Loading({ text }: { text?: string; }) {
         <div className="flex flex-col gap-6 md:gap-10 items-center justify-center relative min-h-[30vh] rounded-3xl w-max m-auto">
             <span className="relative">
                 <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-400 to-pink-400 rounded-full blur-xl"></span>
-                <span className="relative h-[60px] bg-white aspect-square rounded-full flex items-center justify-center"> 
-                    <FaVimeoV size={30} />
+                <span className="relative h-16 bg-white aspect-square rounded-full flex items-center justify-center"> 
+                    <img src={logo} alt="Tekst logo" className="w-6 h-auto" />
                 </span>
             </span>
             <div className="flex flex-col gap-4">
