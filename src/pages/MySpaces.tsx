@@ -1,25 +1,46 @@
 
+import { useContext, useEffect, useState } from "react";
+
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useFetch } from "../utils/fetch";
-import { fetchOptions } from "../assets/data";
 
 import TextSpaceCard from "../components/TextSpaceCard";
 
 import Loading from "../components/Loading";
 import Error from "../components/Error";
+import MoreButton from "../components/MoreButton";
 
 import { TextSpacesFetchResult } from "../types/textSpace.type";
-import { useContext, useEffect, useState } from "react";
 import { authContext, socket } from "../App";
-import MoreButton from "../components/MoreButton";
+
+import { fetchOptions } from "../assets/data";
+
+import { FETCH_FILTERS } from "../assets/constants";
 
 
 const LIMIT = 9;
 
+const getURL = ({ limit, filter, showFavoritesOnly }: { limit: number, filter: string, showFavoritesOnly: boolean }) => {
+    const filters = showFavoritesOnly && !Boolean(filter) ? 
+        "FAVORITES" : 
+        Boolean(filter) && !showFavoritesOnly ? 
+            filter : 
+            Boolean(filter) && showFavoritesOnly ?
+                `${filter}+FAVORITES` :
+                "";
+
+    return `${import.meta.env.VITE_SERVER_URL}/spaces/user/0?limit=${limit}&filter=${filters}`
+}
+
 export default function MySpaces() {
     const { user } = useContext(authContext);
     const [limit, setLimit] = useState(LIMIT);
-    const { loading, error, data, retry } = useFetch<TextSpacesFetchResult>(`${import.meta.env.VITE_SERVER_URL}/spaces/user/0?limit=${limit}`, fetchOptions);
+    const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+    const [filter, setFilter] = useState("");
+
+    const toggleFavorites = () => setShowFavoritesOnly(!showFavoritesOnly);
+
+    const { loading, error, data, retry } = useFetch<TextSpacesFetchResult>(getURL({ showFavoritesOnly, limit, filter }), fetchOptions);
 
     useEffect(() => {
         socket.on('created', ({ userId }: { userId: string }) => {
@@ -31,43 +52,60 @@ export default function MySpaces() {
         socket.on('deleted', ({ textSpaceId }: { textSpaceId: string }) => {
             if(data?.textSpaces?.map(({ _id }) => _id)?.includes(textSpaceId)) retry();
         });
-    }, [socket]);
 
-    if(!data && loading) return <Loading text="Fetching your spaces..." />
-    else if(error) return <Error retry={retry} />;
+        return () => {
+            socket.removeAllListeners();
+        }
+    }, [socket, data]);
+
+    useEffect(() => {
+        const pageTitleElement = document.getElementById("page-title");
+
+        if(pageTitleElement) pageTitleElement.innerText = "Tekst | Your Text Spaces";
+    }, []);
+
+    if(!data && loading) return (
+        <div className="min-h-[calc(100vh_-_80px)] pt-20">
+            <Loading text="Fetching your spaces..." />
+        </div>
+    );
+    else if(error) return (
+        <div className="min-h-[calc(100vh_-_80px)] pt-20">
+            <Error retry={retry} />
+        </div>
+    );
 
     return (
         <div className="min-h-[screen]">
-            <div className="px-4 md:px-6 pt-10 min-h-[100vh] flex gap-10 flex-col">
-                <h2 className="text-gray-800 text-4xl md:text-[3rem] lg:text-[4rem] font-bold animate-[fade-in_1s_ease]">Your spaces</h2>
-                <div className="flex justify-between items-center gap-2 md:gap-4 -mt-6">
-                    <ul className="flex items-center gap-4">
-                        <li>
-                            <button className="px-2 h-[40px] flex relative items-center justify-center before:absolute before:bottom-0 before:left-[50%] before:translate-x-[-50%] before:w-[80%] before:min-w-[40px] before:h-1 before:bg-gray-800 animate-[fade-in_1s_ease_300ms_forwards] opacity-0">
-                                <span className="font-semibold text-sm md:text-base text-gray-800">All</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button className="px-2 h-[40px] flex relative items-center justify-center before:absolute before:bottom-0 before:left-0 before:w-full before:h-1 hover:before:bg-text-400 text-gray-400 animate-[fade-in_1s_ease_400ms_forwards] opacity-0">
-                                <span className="font-semibold text-sm md:text-base">Secured</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button className="px-2 h-[40px] flex relative items-center justify-center before:absolute before:bottom-0 before:left-0 before:w-full before:h-1 hover:before:bg-text-400 text-gray-400 animate-[fade-in_1s_ease_500ms_forwards] opacity-0">
-                                <span className="font-semibold text-sm md:text-base">Unsecured</span>
-                            </button>
-                        </li>
-                    </ul>
-                    <button className="group h-[50px] min-w-[50px] md:px-6 flex gap-2 relative items-center justify-center before:absolute before:top-0 before:left-0 before:w-full before:h-full before:rounded-full before:bg-white before:border before:border-gray-200 hover:before:scale-110 before:transition-transform text-gray-800 focus:text-red-500 focus:before:border-red-500/30 transition-colors">
-                        <AiOutlineHeart size={18} className="relative group-hover:scale-110 transition-transform group-focus:scale-110 group-focus:hidden" />
-                        <AiFillHeart size={18} className="relative group-hover:scale-110 transition-transform group-focus:scale-110 hidden group-focus:block" />
-                        <span className="relative font-semibold text-sm hidden md:block">Favorites</span>
-                    </button>
+            <div className="px-4 md:px-6 pt-10 min-h-screen flex gap-6 sm:gap-10 flex-col">
+                <div className="flex flex-col gap-6 md:gap-10">
+                    <h2 className="text-gray-800 text-4xl md:text-[3rem] lg:text-[4rem] font-bold animate-[fade-in_1s_ease]">Your spaces</h2>
+                    <div className="flex justify-between items-center gap-2 md:gap-4">
+                        <ul className="flex items-center gap-4">
+                            {
+                                FETCH_FILTERS.map(({ title, value }, index) => (
+                                    <li key={index}>
+                                        <button onClick={() => setFilter(value)} className={`${filter === value ? 'text-gray-800 before:bg-gray-800' : 'text-gray-400 hover:before:bg-gray-400 hover:text-gray-600'} px-2 h-[40px] flex relative items-center justify-center before:absolute before:bottom-0 before:left-[50%] before:translate-x-[-50%] before:w-[80%] before:min-w-[40px] before:h-1 before:rounded-t-full animate-[fade-in_1s_ease_300ms_forwards] opacity-0`}>
+                                            <span className="font-semibold text-sm md:text-base">{title}</span>
+                                        </button>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                        <button onClick={toggleFavorites} className={`group h-12 sm:h-10 min-w-12 sm:min-w-10 md:px-4 flex gap-2 relative items-center justify-center before:absolute before:top-0 before:left-0 before:w-full before:h-full before:rounded-full before:bg-white before:border hover:before:scale-110 before:transition-transform shadow shadow-transparent ${showFavoritesOnly ? 'before:border-red-200/50 text-red-500 shadow-red-600/20' : 'text-gray-800 before:border-gray-200'} transition-colors`}>
+                            {
+                                showFavoritesOnly ? 
+                                    <AiFillHeart size={18} className="relative group-hover:scale-110 transition-transform" /> :
+                                    <AiOutlineHeart size={18} className="relative group-hover:scale-110 transition-transform" />
+                            }
+                            <span className="relative font-semibold text-sm hidden md:block">Favorites</span>
+                        </button>
+                    </div>
                 </div>
                 <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {
                         data?.textSpaces?.map((item, index) => (
-                            <li key={index}><TextSpaceCard index={index} limit={LIMIT} data={item} /></li>
+                            <li key={index}><TextSpaceCard index={index} limit={LIMIT} data={item} refetch={retry} /></li>
                         ))
                     }
                 </ul>
