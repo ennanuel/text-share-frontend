@@ -19,7 +19,7 @@ export default function UnlockSecuredSpace({ setPassword, authenticationFailed, 
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <dialog className={`w-screen h-screen fixed top-0 left-0 ${authenticationFailed ? 'flex opacity-100' : 'hidden opacity-0'} transition-opacity duration-300 items-center justify-center bg-black/20 backdrop-blur-md z-[999]`}>
+        <dialog className={`w-screen h-screen p-4 fixed top-0 left-0 ${authenticationFailed ? 'flex opacity-100' : 'hidden opacity-0'} transition-opacity duration-300 items-center justify-center bg-black/20 backdrop-blur-md z-[999]`}>
             <form onSubmit={submitPassword} className={`${showKeyboard ? 'md:-translate-y-1/2' : ''} transition-[ease,_transform] ease-[cubic-bezier(.16,_1,_.3,_1)] duration-300 flex flex-col gap-4 w-full max-w-[420px] p-4 md:p-6 rounded-[32px] bg-white shadow-lg shadow-black/10`}>
                 <div className="flex justify-between items-start gap-4">
                     <div className="flex flex-col gap-1">
