@@ -11,6 +11,8 @@ export interface TextSpace {
     views: number;
     createdAt: string;
     color: string;
+    isYours: boolean;
+    isInYourFavorites: boolean;
     owner: {
         _id: string;
         username: string;
