@@ -79,7 +79,7 @@ export default function LoginAndRegisterLayout () {
                 </header>
                 {
                     loading ?
-                        <div className="flex-1 flex items-center justify-center">
+                        <div className="flex-1 bg-white flex items-center justify-center">
                             <Loading text="Please wait..." />
                         </div> :
                         <div className="flex flex-1">
