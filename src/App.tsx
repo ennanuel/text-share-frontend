@@ -15,14 +15,13 @@ import { keyboardContext } from './components/Keyboard';
 import { fetchOptions } from './assets/data';
 import { io } from 'socket.io-client';
 
-import './App.css';
 import About from './pages/About';
 import LoginAndRegisterLayout from './components/LoginAndRegisterLayout';
 
 export const socket = io(import.meta.env.VITE_SERVER_URL);
 
 export const authContext = createContext<{
-  user: { id: string; } | null;
+  user: { id: string; username: string; profilePicture: string; } | null;
   checkAuthentication: () => Promise<void | null>;
   clearAuthentication: () => Promise<void | null>;
 }>({
@@ -32,7 +31,7 @@ export const authContext = createContext<{
 });
 
 export default function App() {
-  const [user, setUser] = useState<{ id: string; } | null>(null)
+  const [user, setUser] = useState<{ id: string; username: string; profilePicture: string; } | null>(null)
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [idOfInputInFocus, setIdOfInputInFocus] = useState<null | string>(null);
 
@@ -54,7 +53,7 @@ export default function App() {
       if (response.status !== 200) return;
 
       const result = await response.json();
-      setUser({ id: result.userId });
+      setUser({ id: result.userId, username: result?.username, profilePicture: result?.profilePicture });
     } catch (error) {
       console.error(error);
     }
