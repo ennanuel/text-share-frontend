@@ -1,58 +1,63 @@
 
-import TextSpaceCard from "../components/TextSpaceCard";
 import { useContext, useEffect, useState } from "react";
-import { fetchOptions } from "../assets/data";
 
+import TextSpaceCard from "../components/TextSpaceCard";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
+import MoreButton from "../components/MoreButton";
 
+import { authContext, socket } from "../App";
 import { useFetch } from "../utils/fetch";
 
+import { fetchOptions } from "../assets/data";
+
 import { TextSpacesFetchResult } from "../types/textSpace.type";
-import { authContext, socket } from "../App";
-import MoreButton from "../components/MoreButton";
-import { Slide, toast } from "react-toastify";
+import ReloadButton from "../components/ReloadButton";
+import { FETCH_FILTERS } from "../assets/constants";
 
 
-const LIMIT = 9
+const LIMIT = 9;
 
 export default function TextSpaces() {
     const { user } = useContext(authContext);
+    const [reloadText, setReloadText] = useState("");
 
     const [limit, setLimit] = useState(LIMIT);
-    const { data, loading, error, retry } = useFetch<TextSpacesFetchResult>(`${import.meta.env.VITE_SERVER_URL}/spaces/explore/0?limit=${limit}`, fetchOptions);
+    const [filter, setFilter] = useState("");
+    const { data, loading, error, retry } = useFetch<TextSpacesFetchResult>(`${import.meta.env.VITE_SERVER_URL}/spaces/explore/0?limit=${limit}&filter=${filter}`, fetchOptions);
+
+    const reload = () => {
+        retry();
+        setReloadText("");
+    }
 
     useEffect(() => {
         socket.on('created', ({ userId }: { userId: string }) => {
-            if(user?.id !== userId || !userId) toast.info('New Text Spaces. Refresh?', {
-                position: "bottom-center",
-                autoClose: 5000,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: 0.1,
-                theme: "light",
-                transition: Slide,
-                onClick: retry
-            });
+            const showToast = (user?.id !== userId || !userId);
+
+            if(showToast) setReloadText("New text space");
         });
         socket.on('editted', ({ textSpaceId }: { userId: string; textSpaceId: string; }) => {
-            if(data?.textSpaces?.map(({ _id }) => _id).includes(textSpaceId)) toast.info('A Text Space was edited, Refresh?', {
-                position: "bottom-center",
-                autoClose: 5000,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: 0.1,
-                theme: "light",
-                transition: Slide,
-                onClick: retry
-            });
+            const showToast = data?.textSpaces?.map(({ _id }) => _id).includes(textSpaceId);
+
+            if(showToast) setReloadText("Text space changed")
         });
         socket.on('deleted', ({ textSpaceId }: { textSpaceId: string }) => {
-            if(data?.textSpaces?.map(({ _id }) => _id)?.includes(textSpaceId)) retry();
+            const shouldRefresh = data?.textSpaces?.map(({ _id }) => _id)?.includes(textSpaceId);
+
+            if(shouldRefresh) retry();
         });
-    }, [socket])
+
+        return () => {
+            socket.removeAllListeners();
+        }
+    }, [socket, data]);
+
+    useEffect(() => {
+        const pageTitleElement = document.getElementById("page-title");
+
+        if(pageTitleElement) pageTitleElement.innerText = "Tekst | Explore Text Spaces";
+    }, []);
     
     if (!data && loading) return (
         <div className="flex h-[calc(100vh_-_80px)] items-center justify-center">
@@ -67,31 +72,30 @@ export default function TextSpaces() {
     );
 
     else return (
-        <div id="text-spaces" className="min-h-[calc(100vh_-_80px)] relative mt-10 flex flex-col gap-4 px-4">
-            <h1 className="font-bold text-gray-800 text-4xl md:text-[3rem] lg:text-[4rem] animate-[fade-in_1s_ease]">Explore text spaces...</h1>
-            <ul className="flex items-center gap-6 mt-6 md:mt-0 md:gap-10 px-4">
-                <li className="flex flex-col gap-2 justify-between relative opacity-0 animate-[fade-in_1s_ease_300ms_forwards]">
-                    <button className="h-[40px] relative flex items-center justify-center before:absolute before:bottom-0 before:left-[50%] before:translate-x-[-50%] before:w-[80%] before:h-[4px] before:bg-gray-800">
-                        <span className="font-semibold text-sm md:text-base text-gray-800">Popular</span>
-                    </button>
-                </li>
-                <li className="flex flex-col gap-2 justify-between relative opacity-0 animate-[fade-in_1s_ease_400ms_forwards]">
-                    <button className="h-[40px] relative flex items-center justify-center before:absolute before:bottom-0 before:left-[50%] before:translate-x-[-50%] before:w-[80%] before:h-[4px] hover:before:bg-gray-400">
-                        <span className="font-semibold text-sm md:text-base text-gray-400">Recent</span>
-                    </button>
-                </li>
-                <li className="flex flex-col gap-2 justify-between relative opacity-0 animate-[fade-in_1s_ease_500ms_forwards]">
-                    <button className="h-[40px] relative flex items-center justify-center before:absolute before:bottom-0 before:left-[50%] before:translate-x-[-50%] before:w-[80%] before:h-[4px] hover:before:bg-gray-400">
-                        <span className="font-semibold text-sm md:text-base text-gray-400">Random</span>
-                    </button>
-                </li>
-            </ul>
+        <div id="text-spaces" className="min-h-[calc(100vh_-_80px)] relative pt-10 flex flex-col gap-10 px-4">
+            <div className="flex flex-col gap-6 md:gap-10">
+                <h1 className="font-bold text-gray-800 text-4xl md:text-[3rem] lg:text-[4rem] animate-[fade-in_1s_ease]">Explore text spaces...</h1>
+                <ul className="flex items-center mt-6 md:mt-0 gap-6 px-4">
+                    {
+                        FETCH_FILTERS.map(({ title, value }, index) => (
+                            value !== "OWNED" ?
+                                <li key={index}>
+                                    <button onClick={() => setFilter(value)} className={`${filter === value ? 'text-gray-800 before:bg-gray-800' : 'text-gray-400 hover:before:bg-gray-400 hover:text-gray-600'} px-2 h-[40px] flex relative items-center justify-center before:absolute before:bottom-0 before:left-[50%] before:translate-x-[-50%] before:w-[80%] before:min-w-[40px] before:h-1 before:rounded-t-full animate-[fade-in_1s_ease_300ms_forwards] opacity-0`}>
+                                        <span className="font-semibold text-sm md:text-base">{title}</span>
+                                    </button>
+                                </li> :
+                                null
+                        ))
+                    }
+                </ul>
+            </div>
+            <ReloadButton text={reloadText} reload={reload} />
             <div className="flex flex-col gap-4 pb-10">
-                <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-3 mt-6">
+                <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-3">
                     {
                         data?.textSpaces?.map((textSpace, index) => (
                             <li key={index}>
-                                <TextSpaceCard data={textSpace} index={index} limit={LIMIT}  />
+                                <TextSpaceCard data={textSpace} index={index} limit={LIMIT} refetch={retry}  />
                             </li>
                         ))
                     }
