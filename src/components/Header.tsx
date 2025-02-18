@@ -3,9 +3,9 @@ import { Link, NavLink } from "react-router-dom";
 
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { BiCollection, BiSearch, BiUser } from "react-icons/bi";
-import { BsFillCollectionFill, BsFillGridFill } from "react-icons/bs";
+import { BsFillCollectionFill } from "react-icons/bs";
 import { FaAngleDown, FaAngleLeft, } from "react-icons/fa6";
-import { FiInfo } from "react-icons/fi";
+import { FiInfo, FiLogOut } from "react-icons/fi";
 import { MdOutlineLightMode, MdOutlineDarkMode, MdClose } from "react-icons/md";
 
 import ToggleKeyboardButton from "./Keyboard/ToggleKeyboardBtn";
@@ -14,6 +14,7 @@ import { themeContext } from "./Layout";
 import { keyboardContext } from "./Keyboard";
 
 import logo from "../assets/images/tekst_logo_dark.svg";
+import { CgMenuRight } from "react-icons/cg";
 
 const NAV_LINKS = [
     {
@@ -34,12 +35,16 @@ const NAV_LINKS = [
 ]
 
 export default function Header() {
-    const { user } = useContext(authContext);
+    const { user, clearAuthentication } = useContext(authContext);
     const { closeKeyboard } = useContext(keyboardContext);
     const { theme, changeTheme } = useContext(themeContext);
     
+    const [showProfile, setShowProfile] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+    const openProfile = () => setShowProfile(true);
+    const closeProfile = () => setShowProfile(false);
 
     const toggleSearch = () => {
         setShowSearch(!showSearch);
@@ -63,7 +68,7 @@ export default function Header() {
                 </div>
                 <div className="hidden md:flex justify-between items-center gap-4 flex-1">
                     <nav className="relative flex flex-col flex-1 max-w-fit h-14">
-                        <div className={`relative z-10 flex items-center justify-between gap-2 bg-black/80 backdrop-blur-md p-2 ${showSearch ? 'rounded-t-[28px]' : 'rounded-[28px]'} transition-[border-radius] duration-300`}>
+                        <div className={`relative z-10 flex items-center justify-between gap-3 bg-black/80 backdrop-blur-sm p-2 ${showSearch ? 'rounded-t-[28px]' : 'rounded-[28px]'} transition-[border-radius] duration-300`}>
                             <ul className="h-full lg:h-auto flex items-center justify-start gap-2">
                                 {
                                     NAV_LINKS
@@ -78,7 +83,8 @@ export default function Header() {
                                     ))
                                 }
                             </ul>
-                            <button onClick={toggleSearch} className={`flex items-center justify-center w-10 aspect-square rounded-full ${showSearch ? 'bg-white text-black' : 'bg-white/10 hover:bg-white hover:text-black text-white'}`}>
+                            <hr className="w-[1px] h-6 border-none outline-none bg-white/20" />
+                            <button onClick={toggleSearch} className={`flex items-center justify-center w-10 aspect-square rounded-full hover:bg-white/10 text-white`}>
                                 {showSearch ? <MdClose size={20} /> : <BiSearch size={20} />}
                             </button>
                         </div>
@@ -104,10 +110,24 @@ export default function Header() {
                     </button>
                     {
                         user?.id ?
-                            <button className="flex items-center justify-center h-12 rounded-full text-gray-800 bg-white border border-gray-200 px-4 gap-3">
-                                <BiUser size={20} />
-                                <FaAngleDown size={14} />
-                            </button> :
+                            <div onClick={showProfile ? closeProfile : openProfile} className="relative">
+                                <button className="flex items-center justify-center h-12 rounded-full text-gray-800 bg-white border border-gray-200 px-4 gap-3">
+                                    <BiUser size={20} />
+                                    <FaAngleDown size={14} />
+                                </button>
+                                <div className={`${showProfile ? 'pointer-event-all' : 'pointer-events-none'} absolute top-full right-0 p-2 before:fixed before:w-screen before:h-screen before:z-[999999]`}>
+                                    <div className="overflow-clip">
+                                        <ul className={`${showProfile ? 'duration-500 ease-expo' : 'opacity-0 scale-50'} transition-[opacity,_transform] ease-expo origin-top-right duration-300 relative z-[9999999] w-fit p-2 rounded-[24px] bg-white border border-gray-200 flex flex-col gap-1`}>
+                                            <li>
+                                                <button onClick={clearAuthentication} className="flex items-center justify-start gap-2 px-4 min-w-40 h-12 rounded-full hover:bg-red-400/10 text-gray-600 hover:text-red-500">
+                                                    <FiLogOut size={18} />
+                                                    <span className="font-semibold text-base">Log out</span>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div> :
                             <Link to="/sign-up" className="group login-nav-btn relative group h-[60px] lg:h-12 rounded-full overflow-hidden flex items-center justify-center gap-2 px-6">
                                 <span className="absolute z-[1] block top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full h-full rounded-full bg-white group-hover:scale-y-[.90] scale-y-100 group-hover:scale-x-[.96] scale-100 transition-transform"></span>
                                 <span className="font-semibold text-sm relative z-[1] whitespace-nowrap">Sign up</span>
@@ -117,7 +137,7 @@ export default function Header() {
                 </div>
 
                 <div className="w-full flex md:hidden flex-col gap-6 items-end h-12 max-h-12">
-                    <form className={`${showMobileMenu ? 'delay-100' : 'opacity-0 pointer-events-none'} absolute top-4 left-4 w-[calc(100%_-_92px)] transition-[opacity,_transform] duration-500 origin-right flex gap-1 items-center h-12 flex-1 rounded-full px-1 bg-white border border-gray-200`}>
+                    <form className={`${showMobileMenu ? 'delay-100' : 'opacity-0 pointer-events-none'} absolute top-4 left-4 w-[calc(100%_-_92px)] transition-[opacity,_transform] duration-500 origin-right flex gap-1 items-center h-12 flex-1 rounded-full px-2 bg-white border border-gray-200`}>
                         <input type="text" id="mobile-search" placeholder="Search..." className="w-full bg-transparent h-12 px-3 focus:outline-none" />
                         <ToggleKeyboardButton inputId="mobile-search" />
                         <button className="flex items-center justify-center w-10 aspect-square rounded-full bg-black/10 text-gray-800">
@@ -125,8 +145,8 @@ export default function Header() {
                         </button>
                     </form>
                     <div className="flex gap-2 min-h-12 h-12">
-                        <button onClick={toggleMobileMenu} className={`${showMobileMenu ? 'rotate-90' : ''} transition-transform ease-expo duration-300 flex items-center justify-center relative z-10 w-12 min-w-12 h-12 rounded-full bg-black/80 text-gray-200 border border-gray-200/10`}>
-                            {showMobileMenu ? <MdClose size={20} /> : <BsFillGridFill size={20} className="text-white" /> }
+                        <button onClick={toggleMobileMenu} className={`${showMobileMenu ? 'rotate-90' : ''} transition-transform ease-expo duration-500 flex items-center justify-center relative z-10 w-12 min-w-12 h-12 rounded-full bg-black/80 text-gray-200 border border-gray-200/10`}>
+                            {showMobileMenu ? <MdClose size={20} /> : <CgMenuRight size={20} className="text-white" /> }
                         </button>
                     </div>
                     <div className={`${!showMobileMenu && 'pointer-events-none'} relative z-[99999] flex flex-col items-end gap-10`}>
@@ -148,13 +168,13 @@ export default function Header() {
                             <li>
                                 <button className={`${showMobileMenu ? 'delay-[.18s]' : '-translate-y-1/2 scale-50 opacity-0'} duration-500 transition-[opacity,_transform] ease-expo origin-top-right w-fit flex items-center justify-end gap-3 h-12 bg-white rounded-full border border-gray-200 px-3`}>
                                     <FaAngleLeft size={12} className="mr-1" />
-                                    <span>My profile</span>
+                                    <span className="text-sm whitespace-nowrap">My profile</span>
                                     <BiUser size={18} />
                                 </button>
                             </li>
                             <li>
                                 <button className={`${showMobileMenu ? 'delay-[.22s]' : '-translate-y-1/2 scale-50 opacity-0'} duration-500 transition-[opacity,_transform] ease-expo origin-top-right w-fit flex items-center justify-end gap-3 h-12 bg-white rounded-full border border-gray-200 pl-6 pr-3`}>
-                                    <span>Dark mode</span>
+                                    <span className="text-sm whitespace-nowrap">Dark mode</span>
                                     <MdOutlineDarkMode size={14} className="mr-2" />
                                 </button>
                             </li>
