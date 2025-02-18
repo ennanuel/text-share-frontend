@@ -723,7 +723,7 @@ export default function LandingPage() {
                         iconClassName="text-blue-600"
                     />
                     <div className="flex-1 rotating-blocks-container-sm md:rotating-blocks-container-md lg:rotating-blocks-container-lg grid gap-4 mx-auto max-w-[1032px]">
-                        <div className="phone-image-container relative group min-h-[480px] md:min-h-[560px] flex items-stretch justify-center col-span-1 row-span-2 bg-[#202020] rounded-[40px] lg:rounded-[64px] after:absolute after:top-0 after:left-1/2 after:-translate-x-1/2 after:h-2 after:w-1/2 after:rounded-b-full after:bg-[var(--purple)] overflow-clip">
+                        <div className="phone-image-container relative group min-h-[480px] md:min-h-[560px] lg:min-h-auto flex items-stretch justify-center col-span-1 row-span-2 bg-[#202020] rounded-[40px] lg:rounded-[64px] after:absolute after:top-0 after:left-1/2 after:-translate-x-1/2 after:h-2 after:w-1/2 after:rounded-b-full after:bg-[var(--purple)] overflow-clip">
                             <div className="relative h-full flex w-full">
                                 <img src={phoneImage} className="absolute top-10 left-1/2 -translate-x-1/2 translate-y-16 group-hover:translate-y-0 transition-transform ease-expo duration-1000 w-full max-w-[320px] md:max-w-[360px] lg:max-w-[280px]" alt="mobile phone image" />
                             </div>
