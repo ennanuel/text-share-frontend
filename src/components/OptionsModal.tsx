@@ -1,15 +1,31 @@
-import { useState } from "react";
+import { useContext, useMemo, useState } from "react";
 
 import { MdMoreHoriz, MdClose } from "react-icons/md";
-import { TEXT_SPACE_PAGE_OPTIONS } from "../assets/constants";
 
-export default function OptionsModal({ enterEditMode, share, copyLink, remove }: { 
-    enterEditMode: () => void;
-    share: () => void; 
-    copyLink: () => void;
-    remove: () => void; 
-}) {
+import { authContext } from "../App";
+
+import { TEXT_SPACE_OPTIONS } from "../assets/constants";
+
+import { assignActionToOption, filterOption } from "../utils/tekst";
+
+import { TextSpace } from "../types/textSpace.type";
+
+type Props = { 
+    textSpace?: TextSpace;
+    copied: boolean;
+    setCopy: React.Dispatch<React.SetStateAction<boolean>>;
+    setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+    refetch: () => void
+}
+
+export default function OptionsModal({ textSpace, copied, setCopy, setEditMode, refetch }: Props) {
+    const { user } = useContext(authContext);
     const [showOptions, setShowOptions] = useState(false);
+
+    const options = useMemo(() => TEXT_SPACE_OPTIONS
+        .filter((option) => filterOption(option, textSpace, user?.id) && option.type !== "navigate")
+        .map(assignActionToOption)
+    , [copied])
 
     const open = () => setShowOptions(true);
     const close = () => setShowOptions(false);
@@ -24,30 +40,25 @@ export default function OptionsModal({ enterEditMode, share, copyLink, remove }:
                 </span>
             </button>
 
-            <div onClick={handleClick} className={`${showOptions ? '' : 'opacity-0 pointer-events-none'} transition-opacity duration-300 absolute top-0 right-[calc(100%_+_20px)] w-max min-w-[300px]`}>
+            <div onClick={handleClick} className={`${showOptions ? '' : 'opacity-0 pointer-events-none'} transition-opacity duration-300 absolute top-0 right-[calc(100%_+_20px)] w-max min-w-[240px] md:min-w-[300px]`}>
                 <div className="fixed top-0 left-0 w-full h-full bg-black/10 backdrop-blur-sm"></div>
                 <ul className={`${showOptions ? 'delay-100' : 'scale-50 opacity-0'} duration-300 transition-[transform,opacity] origin-top-right relative flex flex-col w-full rounded-[30px] bg-white p-2`}>
                     {
-                        TEXT_SPACE_PAGE_OPTIONS.map(({ type, title, color, background, hoverBackground, Icon }, index) => (
+                        options.map(({ type, title, iconColor, iconBackground, hoverBackground, Icon, action }, index) => (
                             <li key={index}>
                                 <button 
-                                    onClick={
-                                        type === "edit" ? 
-                                            enterEditMode : 
-                                                type === "copy" ? 
-                                                    copyLink : 
-                                                    type === "share" ?
-                                                        share : 
-                                                        type === "remove" ? 
-                                                        remove : 
-                                            undefined
-                                    } 
+                                    onClick={() => action && action({ 
+                                        refetch,
+                                        textSpaceId: textSpace?._id,
+                                        dispatch: type === "edit" ? setEditMode : setCopy,
+                                        content: `${import.meta.env.VITE_LIVE_URL}/space/${textSpace?._id}`
+                                    })} 
                                     className={`w-full flex items-center gap-3 p-2 rounded-full pr-3 ${hoverBackground} ${showOptions ? 'delay-200 duration-300' : 'opacity-0'} transition-opacity`}
                                 >
-                                    <span className={`w-[40px] aspect-square rounded-full ${background} ${color} flex items-center justify-center`}>
+                                    <span className={`w-[40px] aspect-square rounded-full ${iconBackground} ${iconColor} flex items-center justify-center`}>
                                         <Icon size={18} />
                                     </span>
-                                    <span className="font-semibold">{title}</span>
+                                    <span className="font-semibold">{type === "copy" && copied ? "Copied" : title}</span>
                                 </button>
                             </li>
                         ))
