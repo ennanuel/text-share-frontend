@@ -1,41 +1,6 @@
 
-import { FiCopy, FiEdit, FiShare } from "react-icons/fi";
-import { MdArrowForward, MdOutlineFavorite, MdOutlineDelete } from "react-icons/md";
-
-export const TEXT_SPACE_PAGE_OPTIONS = [
-    {
-        type: "edit",
-        title: "Edit space",
-        color: "text-blue-600",
-        background: "bg-blue-400/20",
-        hoverBackground: "hover:bg-blue-100",
-        Icon: FiEdit
-    },
-    {
-        type: "copy",
-        title: "Copy space link",
-        color: "text-yellow-500",
-        background: "bg-yellow-500/20",
-        hoverBackground: "hover:bg-yellow-100",
-        Icon: FiCopy
-    },
-    {
-        type: "share",
-        title: "Share",
-        color: "text-purple-600",
-        background: "bg-purple-600/20",
-        hoverBackground: "hover:bg-purple-100",
-        Icon: FiShare
-    },
-    {
-        type: "remove",
-        title: "Remove space",
-        color: "text-red-600",
-        background: "bg-red-600/20",
-        hoverBackground: "hover:bg-red-100",
-        Icon: MdOutlineDelete
-    }
-]
+import { FiCopy, FiEdit } from "react-icons/fi";
+import { MdArrowForward, MdOutlineDelete, MdFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
 
 export const TEXT_SPACE_COLOR_OPTIONS = [
     {
@@ -92,30 +57,56 @@ export const TEXT_SPACE_COLOR_OPTIONS = [
 export const TEXT_SPACE_OPTIONS = [
     {
         title: "Go to space",
-        action: "navigate",
+        type: "navigate",
         hoverBackground: "hover:bg-blue-100",
         hoverColor: "hover:text-blue-600",
+        iconBackground: "bg-blue-200/20",
+        iconColor: "text-blue-500",
         Icon: MdArrowForward
+    },
+    { 
+        title: "Edit text space",
+        type: "edit",
+        hoverBackground: "hover:bg-blue-100",
+        hoverColor: "hover:text-blue-600",
+        iconBackground: "bg-blue-200/20",
+        iconColor: "text-blue-500",
+        Icon: FiEdit
     },
     {
         title: "Copy link",
-        action: "copy",
-        hoverBackground: "hover:bg-blue-100",
-        hoverColor: "hover:text-blue-600",
+        type: "copy",
+        hoverBackground: "hover:bg-yellow-100",
+        hoverColor: "hover:text-yellow-600",
+        iconBackground: "bg-yellow-200/20",
+        iconColor: "text-yellow-500",
         Icon: FiCopy
     },
     {
         title: "Add to favorite",
-        action: "favorite",
+        type: "favorite",
         hoverBackground: "hover:bg-purple-100",
         hoverColor: "hover:text-purple-600",
-        Icon: MdOutlineFavorite
+        iconBackground: "bg-purple-200/20",
+        iconColor: "text-purple-500",
+        Icon: MdFavorite
+    },
+    {
+        title: "Remove from favorite",
+        type: "unfavorite",
+        hoverBackground: "hover:bg-purple-100",
+        hoverColor: "hover:text-purple-600",
+        iconBackground: "bg-purple-200/20",
+        iconColor: "text-purple-500",
+        Icon: MdOutlineFavoriteBorder
     },
     {
         title: "Delete space",
-        action: "delete",
+        type: "delete",
         hoverBackground: "hover:bg-red-100",
         hoverColor: "hover:text-red-600",
+        iconBackground: "bg-red-200/20",
+        iconColor: "text-red-500",
         Icon: MdOutlineDelete
     }
 ];
@@ -127,7 +118,29 @@ export const DEFAULT_COLOR_OPTION = {
     displayColor: "bg-white",
     iconColor: "bg-gray-100",
     value: "white"
-}
+};
+
+export const FETCH_FILTERS = [
+    {
+        title: "All",
+        value: ""
+    },
+    {
+        title: "Owned",
+        value: "OWNED"
+    },
+    {
+        title: "Secured",
+        value: "SECURED"
+    },
+    {
+        title: "Unsecured",
+        value: "UNSECURED"
+    },
+];
+
+export const CREATED_NEW_TEXT_SPACE_TOAST_ID = "created-new-space";
+export const EDITED_NEW_TEXT_SPACE_TOAST_ID = "edited-new-space";
 
 export const ONE_YEAR_IN_MILLISECONDS = 31536000000;
 export const ONE_MONTH_IN_MILLISECONDS = 2592000000;
