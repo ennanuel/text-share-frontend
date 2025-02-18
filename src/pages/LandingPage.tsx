@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { GrGlobe, GrRun, GrSecure } from "react-icons/gr";
@@ -364,7 +364,7 @@ function DemoComponent({ iconClassName, Icon, className, subTitle, title, desc, 
             whileInView="final"
             transition={{ duration: .6, delay: .3, ease: "easeInOut" }}
             style={{ top: offsetY, minHeight: `calc(110vh - ${offsetY})` }} 
-            className={`${className} p-6 sticky flex-1 flex flex-col lg:flex-row mx-auto mt-20 pb-20 w-full max-w-[1240px] col-span-1 row-span-2 rounded-[32px] after:absolute after:top-0 after:left-1/2 after:-translate-x-1/2 after:h-2 after:w-1/2 after:rounded-b-full after:bg-[var(--purple)] overflow-clip`}
+            className={`${className} p-6 sm:sticky flex-1 flex flex-col gap-10 sm:gap-0 lg:flex-row mx-auto mt-20 pb-20 w-full max-w-[1240px] col-span-1 row-span-2 rounded-[32px] after:absolute after:top-0 after:left-1/2 after:-translate-x-1/2 after:h-2 after:w-1/2 after:rounded-b-full after:bg-[var(--purple)] overflow-clip`}
         >
             <div className="flex-1 flex items-center justify-center">
                 {
@@ -526,7 +526,7 @@ function FaqComponent({ question, answer, index }: { question: string; answer: s
 export default function LandingPage() {
     const prevSection = useRef({ index: 0, value: "", width: 0, translateX: 0 });
     const [showMobileMenu, setShowMobileMenu] = useState(false);
-    const [activeSection, setActiveSection] = useState({ index: 0, value: "", width: 0, translateX: 0 });
+    const [activeSection, setActiveSection] = useState({ index: -1, value: "", width: 0, translateX: 0 });
 
     const devicesRef = useRef<HTMLDivElement>(null);
     const aboutRef = useRef<HTMLUListElement>(null);
@@ -543,8 +543,8 @@ export default function LandingPage() {
     const devicesTranslateY = useTransform(devicesScrollYProgress, [1, 0], [0, 200]);
     const devicesScale = useTransform(devicesScrollYProgress, [1, 0], [1, 0.7]);
 
-    const chooseSection = (index: number, firstTime?: boolean, setPrevActiveSection?: boolean) => {
-        if(activeSection.index === index && !firstTime) return;
+    const chooseSection = (index: number, changePrevSectionToo?: boolean) => {
+        if(activeSection.index === index) return;
 
         const newActiveSection = { index: 0, value: "", width: 0, translateX: 0 };
         const sectionButtons = document.getElementsByClassName('section-btn');
@@ -560,7 +560,7 @@ export default function LandingPage() {
         };
 
         setActiveSection(newActiveSection);
-        if(setPrevActiveSection) prevSection.current = newActiveSection;
+        if(changePrevSectionToo) prevSection.current = newActiveSection;
     };
     const chooseNewSection = () => {
         prevSection.current = activeSection;
@@ -570,9 +570,9 @@ export default function LandingPage() {
         chooseSection(prevSection.current.index);
     };
     
-    useEffect(() => {
-        chooseSection(0, true);
-    }, []);
+    const selectSectionWhileInView = (index: number) => {
+        chooseSection(index, true);
+    };
     
 
     return (
@@ -670,14 +670,14 @@ export default function LandingPage() {
                 </div>
             </header>
             <div className="my-0 mx-auto max-w-[var(--big-max-width)]">
-                <div className="p-6 flex flex-col gap-20 md:gap-8 min-h-[80vh] items-center justify-center pt-[64px]">
-                    <h1 className="text-center tracking-tighter font-bold text-[4rem] leading-[4.5rem] md:text-[7rem] md:leading-[7.5rem] max-w-[16ch]">
+                <motion.div onViewportEnter={() => selectSectionWhileInView(0)} className="p-6 flex flex-col gap-20 md:gap-8 min-h-[80vh] items-center justify-center pt-[64px]">
+                    <h1 className="text-center tracking-tighter font-bold text-[3rem] leading-[3.5rem] sm:text-[4rem] sm:before:leading-[4.5rem] md:text-[7rem] md:leading-[7.5rem] max-w-[16ch]">
                         <motion.span variants={opacityVariants} initial="initial" whileInView="final" transition={{ duration: 1, delay: .2, ease: "easeInOut" }}> Text Sharing Shouldn't be a Chore</motion.span>
                     </h1>
                     <p className="mt-2 font-semibold tracking-tight text-2xl max-w-[60ch] text-center">
                         <motion.span variants={opacityVariants} initial="initial" whileInView="final" transition={{ duration: 1, delay: .4, ease: "easeInOut" }}>Whatever device you own, there's <span className="text-[var(--blue)]">Tekst</span>.<br/> Text sharing at your fingertips.</motion.span>
                     </p>
-                </div>
+                </motion.div>
                 <motion.div 
                     ref={devicesRef} 
                     initial={{ y: 200, opacity: 0 }} 
@@ -692,7 +692,7 @@ export default function LandingPage() {
                         </motion.div>
                     </div>
                 </motion.div>
-                <div className="min-h-screen pt-[160px] pb-10 flex flex-col">
+                <motion.div id="features" onViewportEnter={() => selectSectionWhileInView(1)} className="min-h-screen pt-[160px] pb-10 flex flex-col">
                     <TitleComponent 
                         subTitle="Create a Tekst space" 
                         title="Save time" 
@@ -713,7 +713,7 @@ export default function LandingPage() {
                             ))
                         }
                     </ul>
-                </div>
+                </motion.div>
                 <div className="min-h-screen pt-[160px] pb-10 px-4 md:px-10 flex flex-col gap-20">
                     <TitleComponent 
                         subTitle="Easy and secure" 
@@ -734,7 +734,7 @@ export default function LandingPage() {
                         <RotatingBlock title="Private & Anonymous" index={3} desc="Anonymous sharing with automatic 24-hour deletion." Icon={GoLock} />
                     </div>
                 </div>
-                <div className="min-h-screen py-[160px] p-6 flex flex-col gap-10">
+                <motion.div id="how-it-works" onViewportEnter={() => selectSectionWhileInView(2)} className="min-h-screen py-[160px] p-6 flex flex-col gap-10">
                     <TitleComponent 
                         subTitle="Easy management" 
                         title="Monitor shared spaces" 
@@ -745,7 +745,7 @@ export default function LandingPage() {
                     {
                         DEMOS.map((demo, index) => <DemoComponent key={index} {...demo} index={index} />)
                     }
-                </div>
+                </motion.div>
                 <div className="min-h-screen py-[160px] p-6 flex flex-col gap-10">
                     <TitleComponent 
                         Icon={BiUser} 
@@ -772,7 +772,7 @@ export default function LandingPage() {
                         }
                     </ul>
                 </div>
-                <div className="lg:min-h-screen py-[160px] mb-[200px] p-6 flex flex-col gap-10">
+                <motion.div id="faqs" onViewportEnter={() => selectSectionWhileInView(3)} className="lg:min-h-screen py-[160px] mb-[200px] p-6 flex flex-col gap-10">
                     <div className="flex flex-col items-center justify-center gap-2">
                         <motion.span 
                             variants={opacityVariants} 
@@ -786,7 +786,7 @@ export default function LandingPage() {
                             initial="initial" 
                             whileInView="final" 
                             transition={{ duration: .6, delay: .3, ease: "easeInOut" }} 
-                            className="font-bold text-[5rem] leading-[5.5rem] mb-2"
+                            className="font-bold tracking-tight text-[3rem] md:text-[5rem] leading-[5.5rem] mb-2"
                         >Answers</motion.h3>
                     </div>
                     <ul className="flex flex-col max-w-[600px] mt-10 w-full mx-auto gap-2">
@@ -794,7 +794,7 @@ export default function LandingPage() {
                                 FAQs.slice(0, 4).map((faq, index) => <FaqComponent key={index} index={index} {...faq} />)
                             }
                     </ul>
-                </div>
+                </motion.div>
                 <motion.div
                     variants={opacityVariants} 
                     initial="initial" 
