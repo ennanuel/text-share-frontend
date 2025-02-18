@@ -1,51 +1,53 @@
-# React + TypeScript + Vite
+## Tekst Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains the frontend code for Tekst, a simple and anonymous text sharing platform.  Share text instantly without the hassle of logins or accounts! Just paste your text, get a link, and share it across any device.
 
-Currently, two official plugins are available:
+**Live Demo:** [https://tekst-live.netlify.app](https://tekst-live.netlify.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Built With
 
-## Expanding the ESLint configuration
+*   React
+*   Socket.io-client
+*   Tailwind CSS
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Project Structure
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+src/
+├── components/        # Reusable React components
+│   ├── ...
+├── pages/        # Routes
+│   ├── ...
+├── App.tsx             # Main application component
+├── main.tsx           # Entry point
+├── ...
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Getting Started
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+1.  Clone the repository:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
-# text-share-frontend
+    ```bash
+    git clone [https://github.com/](https://github.com/)[YOUR_GITHUB_USERNAME]/tekst-frontend.git  # Replace with your repo URL
+    cd tekst-frontend
+    ```
+
+2.  Install dependencies:
+
+    ```bash
+    npm install
+    ```
+
+3.  Start the development server:
+
+    ```bash
+    npm run dev
+    ```
+
+    This will start the development server and open the application in your browser.
+
+## Contributing
+
+Contributions are welcome! Feel free to submit pull requests or open issues.
+
+Remember to replace `[YOUR_SERVER_URL]` and `[YOUR_LIVE_URL]` with your actual information. 
