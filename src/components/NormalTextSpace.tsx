@@ -8,22 +8,24 @@ import { VscEye } from "react-icons/vsc";
 
 import OptionsModal from "./OptionsModal";
 
-import { getTextSpaceTime } from "../utils/tekst";
+import { copy, getTextSpaceColors, getTextSpaceTime } from "../utils/tekst";
 
 import { TextSpace } from "../types/textSpace.type";
-import { DEFAULT_COLOR_OPTION } from "../assets/constants";
+import { useMemo } from "react";
 
-
-
-export default function NormalTextSpace({ colors, textSpace, copied, enterEditMode, share, copy, remove }: { 
+type Props = { 
     textSpace: TextSpace | null; 
-    colors: typeof DEFAULT_COLOR_OPTION;
-    copy: (copyType: "link" | "content") => void;
-    enterEditMode: () => void;
-    share: () => void;
-    remove: () => void; 
-    copied: { [key: string]: boolean; }
-}) {
+    copiedLink: boolean;
+    copiedContent: boolean;
+    refetch: () => void;
+    setCopiedLink: React.Dispatch<React.SetStateAction<boolean>>;
+    setCopiedContent: React.Dispatch<React.SetStateAction<boolean>>;
+    setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+
+export default function NormalTextSpace({ textSpace, copiedLink, copiedContent, refetch, setCopiedLink, setCopiedContent, setEditMode }: Props) {
+    const colors = useMemo(() => getTextSpaceColors(textSpace?.color), [textSpace]);
 
     if(!textSpace) return;
 
@@ -32,7 +34,7 @@ export default function NormalTextSpace({ colors, textSpace, copied, enterEditMo
             <div className="flex flex-1 flex-col gap-10">
                 <div className="flex items-center justify-between gap-4">
                     <h1 className="text-[2rem] font-bold flex-1 text-gray-800">{textSpace?.title || "No title"}</h1>
-                    <OptionsModal enterEditMode={enterEditMode} share={share} copyLink={() => copy("content")} remove={remove} />
+                    <OptionsModal refetch={refetch} textSpace={textSpace} setCopy={setCopiedLink} copied={copiedLink} setEditMode={setEditMode} />
                 </div>
                 <ul className="flex flex-wrap items-center gap-2">
                     <li className={`h-10 rounded-full border border-gray-200 bg-white text-black/80 text-sm font-semibold flex gap-2 items-center pl-1 pr-4`}>
@@ -63,15 +65,17 @@ export default function NormalTextSpace({ colors, textSpace, copied, enterEditMo
                     <span className="flex-1 text-sm bg-transparent ml-4 text-black/50 relative block">
                         <span className="absolute top-1/2 -translate-y-1/2 left-0 w-full truncate">{import.meta.env.VITE_LIVE_URL}/space/{textSpace?._id}</span>
                     </span>
-                    <button onClick={() => copy("link")} className="relative w-12 aspect-square bg-black text-white hover:bg-black/90 rounded-full flex items-center justify-center gap-2">
-                        {copied.link ? <FiCheck size={20} /> : <FiCopy size={20} />}
+                    <button 
+                        onClick={() => copy({ dispatch: setCopiedLink, content: `${import.meta.env.VITE_LIVE_URL}/space/${textSpace?._id}`})} 
+                        className="relative w-12 aspect-square bg-black text-white hover:bg-black/90 rounded-full flex items-center justify-center gap-2"
+                    >
+                        {copiedLink ? <FiCheck size={20} /> : <FiCopy size={20} />}
                     </button>
                 </div>
             </div>
             <div className="flex-1 flex flex-col gap-4">
                 <div className="relative">
-                    <textarea name="" readOnly id="text-space-area" className={`w-full min-h-[60vh] rounded-[30px] ng-white shadow-lg shadow-black/10 p-6`} placeholder="Text that is in this space...">
-                        {textSpace?.content}
+                    <textarea name="" value={textSpace?.content} readOnly id="text-space-area" className={`w-full min-h-[60vh] rounded-[30px] ng-white shadow-lg shadow-black/10 p-6`} placeholder="Text that is in this space...">
                     </textarea>
                 </div>
                 <div className="flex justify-between items-center">
@@ -90,10 +94,10 @@ export default function NormalTextSpace({ colors, textSpace, copied, enterEditMo
                     </button>
                 </div>
                 <div className="flex items-center gap-4 mt-2">
-                    <button onClick={() => copy("content")} className="btn group relative flex items-center justify-center gap-3 w-[90%] m-auto">
-                        <span className="font-semibold relative text-sm">{copied.content ? "Content copied" : "Copy to clipboard"}</span>
+                    <button onClick={() => copy({ dispatch: setCopiedContent, content: textSpace.content })} className="btn group relative flex items-center justify-center gap-3 w-[90%] m-auto">
+                        <span className="font-semibold relative text-sm">{copiedContent ? "Content copied" : "Copy to clipboard"}</span>
                         {
-                            copied.content ? 
+                            copiedContent ? 
                                 <FiCheck size={18} className="relative group-hover:scale-110 transition-transform" /> : 
                                 <BiCopy size={18} className="relative group-hover:scale-110 transition-transform" /> 
                         }
