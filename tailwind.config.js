@@ -3,7 +3,9 @@ export default {
   content: ["./src/**/*.{html,js,ts,tsx,css}"],
   theme: {
     screens: {
-      'sm': '400px',
+      sm: '400px',
+      md: '768px',
+      lg: '1024px'
     },
     extend: {
       fontFamily: {
