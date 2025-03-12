@@ -17,6 +17,7 @@ import { io } from 'socket.io-client';
 
 import About from './pages/About';
 import LoginAndRegisterLayout from './components/LoginAndRegisterLayout';
+import Search from './pages/Search';
 
 export const socket = io(import.meta.env.VITE_SERVER_URL);
 
@@ -94,6 +95,7 @@ export default function App() {
             <Route path="/my-spaces" element={<MyTextSpaces />} />
             <Route path="/spaces" element={<TextSpaces />} />
             <Route path="/space/:id" element={<TextSpace />} />
+            <Route path="/search/:searchValue" element={<Search />} />
           </Route>
         </Routes>
       </keyboardContext.Provider>
