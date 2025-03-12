@@ -10,7 +10,7 @@
 @layer components {
   .rotating-blocks-container-lg {
     grid-template-columns:  3fr 3.8fr 3fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: auto auto;
     grid-template-areas: 
       "rotating-block-0 phone-image rotating-block-1"
       "rotating-block-2 phone-image rotating-block-3";
@@ -18,7 +18,7 @@
 
   .rotating-blocks-container-md {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto repeat(2, 1fr);
+    grid-template-rows: auto repeat(2, auto);
     grid-template-areas: 
       "phone-image phone-image"
       "rotating-block-0 rotating-block-1"
@@ -27,7 +27,7 @@
 
   .rotating-blocks-container-sm {
     grid-template-columns: 1fr;
-    grid-template-rows: auto repeat(4, 1fr);
+    grid-template-rows: auto repeat(4, auto);
     grid-template-areas: 
       "phone-image"
       "rotating-block-0"
