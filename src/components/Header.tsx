@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { BiCollection, BiSearch, BiUser } from "react-icons/bi";
 import { BsFillCollectionFill } from "react-icons/bs";
-import { FaAngleDown, FaAngleLeft, } from "react-icons/fa6";
+import { FaAngleDown } from "react-icons/fa6";
 import { FiInfo, FiLogOut } from "react-icons/fi";
 import { MdOutlineLightMode, MdOutlineDarkMode, MdClose } from "react-icons/md";
 
@@ -15,6 +15,7 @@ import { keyboardContext } from "./Keyboard";
 
 import logo from "../assets/images/tekst_logo_dark.svg";
 import { CgMenuRight } from "react-icons/cg";
+import NavProfile from "./NavProfile";
 
 const NAV_LINKS = [
     {
@@ -35,6 +36,7 @@ const NAV_LINKS = [
 ]
 
 export default function Header() {
+    const navigate = useNavigate();
     const { user, clearAuthentication } = useContext(authContext);
     const { closeKeyboard } = useContext(keyboardContext);
     const { theme, changeTheme } = useContext(themeContext);
@@ -42,6 +44,7 @@ export default function Header() {
     const [showProfile, setShowProfile] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const [searchValue, setSearchValue] = useState("");
 
     const openProfile = () => setShowProfile(true);
     const closeProfile = () => setShowProfile(false);
@@ -54,6 +57,16 @@ export default function Header() {
     const toggleMobileMenu = () => {
         setShowMobileMenu(!showMobileMenu);
         if(showMobileMenu) closeKeyboard();
+    };
+
+    const handleSearchInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        setSearchValue(event.target.value);
+    }
+
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+        event.preventDefault();
+
+        navigate(`search/${searchValue}`);
     }
 
     return (
@@ -88,22 +101,22 @@ export default function Header() {
                                 {showSearch ? <MdClose size={20} /> : <BiSearch size={20} />}
                             </button>
                         </div>
-                        <div className={`flex items-center gap-2 bg-black/80 backdrop-blur-md p-2 rounded-b-[28px] border-t border-white/20 ${showSearch ? 'rounded-b-[28px]' : 'rounded-[28px] opacity-0 -translate-y-full pointer-events-none'} transition-[opacity,_transform,_border-radius] duration-300`}>
-                            <input id="search" placeholder="Search..." type="text" className="pl-4 pr-2 bg-transparent text-sm rounded-full h-8 flex-1 text-white placeholder:text-white/50 focus:outline-none focus:border-none" />
+                        <form onSubmit={handleSubmit} className={`flex items-center gap-2 bg-black/80 backdrop-blur-md p-2 rounded-b-[28px] border-t border-white/20 ${showSearch ? 'rounded-b-[28px]' : 'rounded-[28px] opacity-0 -translate-y-full pointer-events-none'} transition-[opacity,_transform,_border-radius] duration-300`}>
+                            <input id="search" placeholder="Search..." type="text" value={searchValue} onChange={handleSearchInputChange} className="pl-4 pr-2 bg-transparent text-sm rounded-full h-8 flex-1 text-white placeholder:text-white/50 focus:outline-none focus:border-none" />
                             <ToggleKeyboardButton inputId="search" darkMode />
-                        </div>
+                        </form>
                     </nav>
                 </div>
                 <div className="hidden md:flex gap-3 items-center justify-end">
                     <button
                         onClick={changeTheme}
-                        className={`relative group w-fit lg:w-12 h-[60px] lg:h-12 rounded-full overflow-hidden flex justify-center border ${theme === "light" ? 'bg-white border-gray-200' : 'bg-black border-black text-white'} transition-[background-color] duration-300`}
+                        className={`relative group w-fit lg:w-12 h-[60px] lg:h-12 rounded-full overflow-hidden hidden justify-center border border-gray-200 text-gray-800 bg-white transition-[background-color] duration-300`}
                     >
-                        <span className={`flex flex-col transition-transform ${theme === "light" ? '' : 'translate-y-[-50%]'} duration-500`}>
+                        <span className={`flex flex-col transition-transform ${theme === "light" ? '' : '-translate-y-1/2'} h-[120px] lg:h-24 duration-500 ease-expo`}>
                             <span className="flex items-center justify-center min-w-[60px] lg:min-w-12 min-h-[60px] lg:min-h-12">
                                 <MdOutlineLightMode size={18} className="transition-transform group-hover:scale-125 duration-300" />
                             </span>
-                            <span className="flex items-center justify-center min-w-[60px] lg:min-w-12 min-h-[60px] lg:min-h-12">
+                            <span className="flex items-center justify-center min-w-[60px] lg:min-w-12 min-h-[60px] bg-black text-white rounded-full lg:min-h-12">
                                 <MdOutlineDarkMode size={18} className="transition-transform group-hover:scale-125 duration-300" />
                             </span>
                         </span>
@@ -165,18 +178,14 @@ export default function Header() {
                             }
                         </ul>
                         <ul className="flex flex-col items-end gap-2">
-                            <li>
-                                <button className={`${showMobileMenu ? 'delay-[.18s]' : '-translate-y-1/2 scale-50 opacity-0'} duration-500 transition-[opacity,_transform] ease-expo origin-top-right w-fit flex items-center justify-end gap-3 h-12 bg-white rounded-full border border-gray-200 px-3`}>
-                                    <FaAngleLeft size={12} className="mr-1" />
-                                    <span className="text-sm whitespace-nowrap">My profile</span>
-                                    <BiUser size={18} />
-                                </button>
-                            </li>
-                            <li>
+                            <li className="hidden">
                                 <button className={`${showMobileMenu ? 'delay-[.22s]' : '-translate-y-1/2 scale-50 opacity-0'} duration-500 transition-[opacity,_transform] ease-expo origin-top-right w-fit flex items-center justify-end gap-3 h-12 bg-white rounded-full border border-gray-200 pl-6 pr-3`}>
                                     <span className="text-sm whitespace-nowrap">Dark mode</span>
                                     <MdOutlineDarkMode size={14} className="mr-2" />
                                 </button>
+                            </li>
+                            <li>
+                                <NavProfile closeMenu={() => setShowMobileMenu(false)} showMobileMenu={showMobileMenu} />
                             </li>
                         </ul>
                     </div>
