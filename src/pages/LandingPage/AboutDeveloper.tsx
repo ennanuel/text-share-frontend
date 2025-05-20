@@ -37,7 +37,7 @@ export default function () {
                     <span>If you find Tekst useful, please consider <span className="text-yellow-400">donating</span> to help me keep improving it!</span>
                 </p>
                 <div className="flex flex-wrap gap-10 mt-6">
-                    <a href="https://ezem.netlify.app" className="h-12 rounded-full px-8 flex items-center justify-center bg-blue-600 text-white">
+                    <a href="https://ezema.netlify.app" className="h-12 rounded-full px-8 flex items-center justify-center bg-blue-600 text-white">
                         <span className="text-base md:text-lg font-semibold">Checkout my website</span>
                     </a>
                     <a target="_blank" href="emmanuelezema6@gmail.com" className="group flex flex-col md:flex-row md:items-center md:justify-center gap-3 text-sm md:text-base">
