@@ -1,7 +1,20 @@
 import { useEffect } from "react";
 import { BiMessage } from "react-icons/bi";
-import { FiFacebook, FiGithub, FiInstagram } from "react-icons/fi";
+import { FiGithub } from "react-icons/fi";
 
+
+const OTHER_APPS = [
+    {
+        title: "Ridm",
+        icon: "/images/ridm_logo.svg",
+        href: "https://ridm.netlify.app"
+    },
+    {
+        title: "ScorePlug",
+        icon: "/images/scoreplug_logo.png",
+        href: "https://scoreplug.vercel.app"
+    },
+]
 
 export default function About() {
 
@@ -28,24 +41,27 @@ export default function About() {
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-8">
-                        <button className="rounded-full relative flex items-center justify-center gap-2 flex-1 md:flex-auto max-w-fit sm:min-w-40 px-4 md:px-6 h-12 border border-white/20 text-white/80 hover:bg-white/10 hover:border-transparent">
+                        <a href="mailto:emmanuelezema21@gmail.com" className="rounded-full relative flex items-center justify-center gap-2 flex-1 md:flex-auto max-w-fit sm:min-w-40 px-4 md:px-6 h-12 border border-white/20 text-white/80 hover:bg-white/10 hover:border-transparent">
                             <BiMessage size={18} />
                             <span className="relative font-semibold text-sm md:text-base">Let's chat</span>
-                        </button>
-                        <button className="bg-white text-black rounded-full relative flex items-center flex-1 md:flex-auto max-w-fit justify-center gap-2 sm:min-w-40 px-4 md:px-6 h-12 border border-white">
+                        </a>
+                        <a href="" className="bg-white text-black rounded-full relative flex items-center flex-1 md:flex-auto max-w-fit justify-center gap-2 sm:min-w-40 px-4 md:px-6 h-12 border border-white">
                             <FiGithub size={18} className="relative" />
                             <span className="relative font-semibold text-sm md:text-base">View code</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-6 flex-wrap">
+                    <p className="text-white/60 text-sm font-normal whitespace-nowrap">Also check out</p>
                     <div className="peer flex gap-2">
-                        <span className="flex items-center justify-center w-12 aspect-square rounded-full border border-white/10 hover:border-transparent hover:bg-white/10 text-white/80 hover:text-white">
-                            <FiFacebook size={20} />
-                        </span>
-                        <span className="flex items-center justify-center w-12 aspect-square rounded-full border border-white/10 hover:border-transparent hover:bg-white/10 text-white/80 hover:text-white">
-                            <FiInstagram size={20} />
-                        </span>
+                        {
+                            OTHER_APPS.map(({ title, icon, href }) => (
+                                <a href={href} target="_blank" className="h-10 pl-2 pr-4 flex items-center justify-center gap-2 text-white/80 font-semibold bg-white/5 hover:bg-white/10 hover:text-white rounded-xl">
+                                    <img src={icon} alt={title} className="w-6 aspect-square object-cover" />
+                                    <span>{title}</span>
+                                </a>
+                            ))
+                        }
                     </div>
                 </div>
              </div>
