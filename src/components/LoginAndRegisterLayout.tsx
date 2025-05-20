@@ -9,6 +9,7 @@ import logo from "../assets/images/tekst_logo.svg";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { FiGithub, FiInstagram, FiLinkedin, FiTwitter } from "react-icons/fi";
 import { BiSolidDonateHeart } from "react-icons/bi";
+import { CSSProperties } from "react";
 
 const LINKS = [
     {
@@ -58,20 +59,21 @@ export default function LoginAndRegisterLayout () {
             }} 
             className="relative bg-white">
             <div className="min-h-screen flex bg-fixed bg-no-repeat bg-cover flex-col bg-black/30">
-                <header className="sticky top-0 z-10 bg-black/50 backdrop-blur-md text-white py-4 px-4 sm:px-6">
-                    <div className="my-0 m-auto max-w-[var(--max-width)] flex items-center justify-between gap-4">
+                <header className="sticky top-0 z-10 text-white py-4 px-4 sm:px-6">
+                    <div style={headerMask} className="absolute top-0 left-0 w-full h-full pointer-events-none backdrop-blur-lg bg-black/50"></div>
+                    <div className="relative my-0 m-auto max-w-[var(--max-width)] flex items-center justify-between gap-4">
                         <Link to="/" className="flex items-center justify-center">
                             <img src={logo} className="w-8 h-auto" />
                             <span className="font-bold text-3xl">ekst</span>
                         </Link>
                         {
                             pathname.includes('sign-in') ?
-                                <Link to="/sign-up" className="text-blue-300 group hover:underline hover:text-blue-200 flex items-center justify-center gap-2">
-                                    <span className="font-light group-hover:underline text-sm">Sign up</span>
+                                <Link to="/sign-up" className="h-10 pl-5 pr-3 rounded-full hover:bg-black/10 flex items-center justify-center gap-3 text-blue-400 hover:text-blue-200">
+                                    <span className="font-semibold text-sm">Create account</span>
                                     <AiOutlineArrowRight size={16} />
                                 </Link> :
-                                <Link to="/sign-in" className="text-blue-300 group hover:underline hover:text-blue-200 flex items-center justify-center gap-2">
-                                    <span className="font-light group-hover:underline text-sm">Sign in</span>
+                                <Link to="/sign-in" className="h-10 pl-5 pr-3 rounded-full hover:bg-black/10 flex items-center justify-center gap-3 text-blue-400 hover:text-blue-200">
+                                    <span className="font-semibold text-sm">Login</span>
                                     <AiOutlineArrowRight size={16} />
                                 </Link>
                         }
@@ -128,4 +130,8 @@ export default function LoginAndRegisterLayout () {
             </footer>
         </div>
     );
+};
+
+const headerMask: CSSProperties = {
+    maskImage: 'linear-gradient(black, transparent)'
 }
