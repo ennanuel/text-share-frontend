@@ -10,7 +10,7 @@ import logo from "../assets/images/tekst_logo.svg"
 const NAV_LINKS = [
     {
         title: "Home",
-        link: "/my-spaces"
+        link: "/"
     },
     {
         title: "Explore spaces",
@@ -21,13 +21,20 @@ const NAV_LINKS = [
         link: "/about"
     },
     {
-        title: "Donate",
-        link: "/about"
+        title: "GitHub",
+        isExternalLink: true,
+        link: "https://github.com/ennanuel/text-share-frontend"
     },
     {
-        title: "GitHub",
-        link: "/about"
-    }
+        title: "ScorePlug",
+        isExternalLink: true,
+        link: "https://scoreplug.vercel.app"
+    },
+    {
+        title: "Ridm",
+        isExternalLink: true,
+        link: "https://ridm.netlify.app"
+    },
 ]
 
 export default function Footer() { 
@@ -60,9 +67,15 @@ export default function Footer() {
                     <div className="flex flex-1 gap-6">
                         <ul className="flex flex-col gap-2">
                             {
-                                NAV_LINKS.map(({ title, link }, index) => (
+                                NAV_LINKS.map(({ title, link, isExternalLink }, index) => (
                                     <li key={index}>
-                                        <Link to={!user?.id && title === "Home" ? "/" : link} className="text-lg font-semibold text-gray-300 h-12 rounded-full md:px-6 flex items-center justify-start md:justify-start md:hover:bg-white/10 hover:text-white whitespace-nowrap">{title}</Link>
+                                        {
+                                            isExternalLink ?
+                                                <Link to={link} className="text-lg font-semibold text-gray-300 h-12 rounded-full md:px-6 flex items-center justify-start md:justify-start md:hover:bg-white/10 hover:text-white whitespace-nowrap">{title}</Link> :
+                                                <a href={link} className="text-lg font-semibold text-gray-300 h-12 rounded-full md:px-6 flex items-center justify-start md:justify-start md:hover:bg-white/10 hover:text-white whitespace-nowrap">
+                                                    <span>{title}</span>
+                                                </a>
+                                        }
                                     </li>
                                 ))
                             }
