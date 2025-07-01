@@ -1,6 +1,6 @@
 
 import { createContext, useEffect, useState } from 'react';
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useSearchParams } from "react-router-dom";
 
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
@@ -12,19 +12,21 @@ import MyTextSpaces from './pages/MySpaces';
 import LandingPage from './pages/LandingPage';
 
 import { keyboardContext } from './components/Keyboard';
-import { fetchOptions } from './assets/data';
 import { io } from 'socket.io-client';
 
 import About from './pages/About';
 import LoginAndRegisterLayout from './components/LoginAndRegisterLayout';
 import Search from './pages/Search';
 
+import { User } from './types/textSpace.type';
+import { checkAuthentication, clearUserAuthentication, recordUser } from './utils';
+
 export const socket = io(import.meta.env.VITE_SERVER_URL);
 
 export const authContext = createContext<{
   user: { id: string; username: string; profilePicture: string; } | null;
-  checkAuthentication: () => Promise<void | null>;
-  clearAuthentication: () => Promise<void | null>;
+  checkAuthentication: () => Promise<User | null>;
+  clearAuthentication: () => void;
 }>({
   user: null,
   checkAuthentication: async () => null,
@@ -32,10 +34,11 @@ export const authContext = createContext<{
 });
 
 export default function App() {
-  const [user, setUser] = useState<{ id: string; username: string; profilePicture: string; } | null>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [idOfInputInFocus, setIdOfInputInFocus] = useState<null | string>(null);
 
+  const [searchParams] = useSearchParams();
   const location = useLocation();
 
   const openKeyboard = (idOfInputToFocus: string) => {
@@ -48,35 +51,23 @@ export default function App() {
     setIdOfInputInFocus(null);
   }
 
-  async function checkAuthentication() {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/check`, fetchOptions);
-      if (response.status !== 200) return;
-
-      const result = await response.json();
-      setUser({ id: result.userId, username: result?.username, profilePicture: result?.profilePicture });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  async function clearAuthentication() { 
-    try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/logout`, { ...fetchOptions, method: "POST" });
-      if(response.status !== 204) return;
-      setUser(null);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const clearAuthentication = () => {
+    clearUserAuthentication()
+      .then(() => setUser(null));
+  }
 
   useEffect(() => {
-    checkAuthentication();
+    const avoidVisitor = searchParams.get('omit') === 'true';
+    recordUser(avoidVisitor);
+    checkAuthentication()
+      .then((user) => {
+        if(user) setUser(user);
+      });
   }, []);
 
   useEffect(() => {
     setTimeout(() => window.scrollTo(0, 0), 0);
-  }, [location])
+  }, [location]);
 
   return (
     <authContext.Provider value={{ user, checkAuthentication, clearAuthentication }}>
