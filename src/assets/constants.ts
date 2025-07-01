@@ -2,6 +2,12 @@
 import { FiCopy, FiEdit } from "react-icons/fi";
 import { MdArrowForward, MdOutlineDelete, MdFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
 
+export const ENDPOINT_URL = import.meta.env.VITE_ENDPOINT_URL;
+export const IP_URL = import.meta.env.VITE_IP_URL;
+export const COLLECTION_ID = import.meta.env.VITE_COLLECTION_ID2;
+export const DB_ID = import.meta.env.VITE_DB_ID;
+export const PROJECT_ID = import.meta.env.VITE_PROJECT_ID;
+
 export const TEXT_SPACE_COLOR_OPTIONS = [
     {
         background: "bg-red-400",
