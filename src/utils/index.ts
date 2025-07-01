@@ -3,9 +3,6 @@ import { COLLECTION_ID, DB_ID, ENDPOINT_URL, IP_URL, PROJECT_ID } from "../asset
 import { fetchOptions } from "../assets/data";
 import { User } from "../types/textSpace.type";
 
-console.log(COLLECTION_ID, DB_ID, ENDPOINT_URL, IP_URL, PROJECT_ID);
-
-
 type Payload = {
     [key: string]: string;
 };
