@@ -1,5 +1,11 @@
 
 
+export type User = {
+    id: string; 
+    username: string; 
+    profilePicture: string; 
+};
+
 export interface TextSpace {
     _id: string;
     index: number;
@@ -26,4 +32,4 @@ export type TextSpacesFetchResult = {
     sortedBy: string;
     totalPages: number;
     textSpaces: TextSpace[];
-}
+};
